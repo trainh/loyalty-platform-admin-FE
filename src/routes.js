@@ -12,7 +12,6 @@ import Gift from './pages/Gift';
 import Login from './pages/Login';
 import NotFound from './pages/Page404';
 import Register from './pages/Register';
-import Products from './pages/Products';
 import DashboardApp from './pages/DashboardApp';
 
 // ----------------------------------------------------------------------
@@ -29,7 +28,6 @@ export default function Router() {
         { path: 'voucher', element: <Voucher /> },
         { path: 'condition', element: <Condition /> },
         { path: 'gift', element: <Gift /> },
-        { path: 'products', element: <Products /> },
         { path: 'blog', element: <Blog /> },
       ],
     },

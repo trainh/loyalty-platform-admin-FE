@@ -17,19 +17,14 @@ const navConfig = [
     icon: getIcon('eva:people-fill'),
   },
   {
-    title: 'product',
-    path: '/dashboard/products',
-    icon: getIcon('eva:shopping-bag-fill'),
-  },
-  {
     title: 'promotion',
     path: '/dashboard/promotion',
-    icon: getIcon('eva:promotion-fill'),
+    icon: getIcon('eva:percent-fill'),
   },
   {
     title: 'voucher',
     path: '/dashboard/voucher',
-    icon: getIcon('eva:ticket-fill'),
+    icon: getIcon('eva:loyalty-fill'),
   },
   {
     title: 'condition',
