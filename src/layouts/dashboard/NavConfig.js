@@ -22,25 +22,20 @@ const navConfig = [
     icon: getIcon('eva:percent-fill'),
   },
   {
-    title: 'voucher',
-    path: '/dashboard/voucher',
-    icon: getIcon('eva:loyalty-fill'),
-  },
-  {
     title: 'condition',
     path: '/dashboard/condition',
-    icon: getIcon('eva:condition-fill'),
+    icon: getIcon('eva:book-fill'),
+  },
+  {
+    title: 'voucher',
+    path: '/dashboard/voucher',
+    icon: getIcon('bi:tag-fill'),
   },
   {
     title: 'gift',
     path: '/dashboard/gift',
     icon: getIcon('eva:gift-fill'),
   },
-  // {
-  //   title: 'blog',
-  //   path: '/dashboard/blog',
-  //   icon: getIcon('eva:file-text-fill'),
-  // },
   // {
   //   title: 'login',
   //   path: '/login',
