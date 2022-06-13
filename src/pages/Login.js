@@ -88,7 +88,7 @@ export default function Login() {
         <Container maxWidth="sm">
           <ContentStyle>
             <Typography variant="h4" gutterBottom>
-              Sign in to Minimal
+              Sign in to Loyalty Program
             </Typography>
 
             <AuthSocial />
