@@ -1,5 +1,5 @@
 // @mui
-import { useTheme } from '@mui/material/styles';
+// import { useTheme } from '@mui/material/styles';
 import { Grid, Container, Typography } from '@mui/material';
 // components
 import Page from '../components/Page';
@@ -9,7 +9,7 @@ import { AppWidgetSummary } from '../sections/@dashboard/app';
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
-  const theme = useTheme();
+  // const theme = useTheme();
 
   return (
     <Page title="Dashboard">
