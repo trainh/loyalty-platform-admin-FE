@@ -69,9 +69,14 @@
         "object": true,
         "array": false
       }
-    ], "import/no-unresolved": [
-        2,
-        {"caseSensitive": false}
     ]
+  },
+  "settings": {
+    "import/resolver":  {
+        "node" : {
+            "paths" : "./"
+        }
+    }    
   }
+
 }
