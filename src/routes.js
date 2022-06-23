@@ -3,7 +3,7 @@ import { Navigate, useRoutes } from 'react-router-dom';
 import DashboardLayout from './layouts/dashboard';
 import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 //
-import User from './pages/User';
+import Membership from './pages/Membership';
 import Promotion from './pages/promotion/Promotion';
 import NewPromotion from './pages/promotion/NewPromotion';
 import Voucher from './pages/voucher/Voucher';
@@ -23,7 +23,7 @@ export default function Router() {
       element: <DashboardLayout />,
       children: [
         { path: 'app', element: <DashboardApp /> },
-        { path: 'user', element: <User /> },
+        { path: 'membership', element: <Membership /> },
         { path: 'promotion', element: <Promotion /> },
         { path: 'voucher', element: <Voucher /> },
         { path: 'condition', element: <Condition /> },

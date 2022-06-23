@@ -1,5 +1,5 @@
 import Page from '../../components/Page';
-import DashboardSidebar from '../../layouts/dashboard/DashboardSidebar';
+// import DashboardSidebar from '../../layouts/dashboard/DashboardSidebar';
 
 // ----------------------------------------------------------------------
 

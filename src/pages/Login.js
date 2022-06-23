@@ -8,7 +8,6 @@ import useResponsive from '../hooks/useResponsive';
 import Page from '../components/Page';
 import Logo from '../components/Logo';
 // sections
-import { LoginForm } from '../sections/auth/login';
 import AuthSocial from '../sections/auth/AuthSocial';
 
 // ----------------------------------------------------------------------
@@ -92,8 +91,6 @@ export default function Login() {
             </Typography>
 
             <AuthSocial />
-
-            <LoginForm />
 
             {!smUp && (
               <Typography variant="body2" align="center" sx={{ mt: 3 }}>
