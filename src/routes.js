@@ -4,10 +4,11 @@ import DashboardLayout from './layouts/dashboard';
 import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 //
 import User from './pages/User';
-import Promotion from './pages/Promotion';
-import Voucher from './pages/Voucher';
-import Condition from './pages/Condition';
-import Gift from './pages/Gift';
+import Promotion from './pages/promotion/Promotion';
+import NewPromotion from './pages/promotion/NewPromotion';
+import Voucher from './pages/voucher/Voucher';
+import Condition from './pages/condition/Condition';
+import Gift from './pages/gift/Gift';
 import Login from './pages/Login';
 import NotFound from './pages/Page404';
 import Register from './pages/Register';
@@ -29,6 +30,11 @@ export default function Router() {
         { path: 'gift', element: <Gift /> },
       ],
     },
+    // {
+    //   path: '/promotion',
+    //   element: <DashboardLayout />,
+    //   children: [{ path: 'new-promotion', element: <NewPromotion /> }],
+    // },
     {
       path: '/',
       element: <LogoOnlyLayout />,
@@ -37,6 +43,7 @@ export default function Router() {
         { path: 'login', element: <Login /> },
         { path: 'register', element: <Register /> },
         { path: '404', element: <NotFound /> },
+        { path: 'new-promotion', element: <NewPromotion /> },
         { path: '*', element: <Navigate to="/404" /> },
       ],
     },

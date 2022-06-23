@@ -1,5 +1,5 @@
 import { filter } from 'lodash';
-// import { sentenceCase } from 'change-case';?
+import { sentenceCase } from 'change-case';
 import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // material
@@ -18,22 +18,25 @@ import {
   TablePagination,
 } from '@mui/material';
 // components
-import Page from '../components/Page';
-import Scrollbar from '../components/Scrollbar';
-import Iconify from '../components/Iconify';
-import SearchNotFound from '../components/SearchNotFound';
-import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
+import Page from '../../components/Page';
+import Label from '../../components/Label';
+import Scrollbar from '../../components/Scrollbar';
+import Iconify from '../../components/Iconify';
+import SearchNotFound from '../../components/SearchNotFound';
+import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/@dashboard/user';
 // mock
-import USERLIST from '../_mock/user';
+import USERLIST from '../../_mock/user';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'no', label: 'No', alignRight: false },
   { id: 'name', label: 'Name', alignRight: false },
-  { id: 'type', label: 'Type', alignRight: false },
-  { id: 'createDate', label: 'Create Date', alignRight: false },
-  { id: 'updateDate', label: 'Update Date', alignRight: false },
+  { id: 'actionName', label: 'Action Name', alignRight: false },
+  { id: 'total', label: 'Total', alignRight: false },
+  { id: 'repemded', label: 'Repemded', alignRight: false },
+  { id: 'used', label: 'Used', alignRight: false },
+  { id: '' },
 ];
 
 // ----------------------------------------------------------------------
@@ -130,14 +133,14 @@ export default function User() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="Gift">
+    <Page title="Voucher">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Gift
+            Voucher
           </Typography>
           <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
-            New Gift
+            New Voucher
           </Button>
         </Stack>
 
@@ -158,19 +161,11 @@ export default function User() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, no, name, type, createDate, updateDate, avatarUrl } = row;
-                    const isItemSelected = selected.indexOf(name) !== -1;
+                    const { id, name, actionName, total, repemded, avatarUrl, used } = row;
+                    // const isItemSelected = selected.indexOf(name) !== -1;
 
                     return (
-                      <TableRow
-                        hover
-                        key={id}
-                        tabIndex={-1}
-                        role="checkbox"
-                        selected={isItemSelected}
-                        aria-checked={isItemSelected}
-                      >
-                        <TableCell align="left">{no}</TableCell>
+                      <TableRow hover key={id}>
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
                             <Avatar alt={name} src={avatarUrl} />
@@ -179,9 +174,15 @@ export default function User() {
                             </Typography>
                           </Stack>
                         </TableCell>
-                        <TableCell align="left">{type}</TableCell>
-                        <TableCell align="left">{createDate}</TableCell>
-                        <TableCell align="left">{updateDate}</TableCell>
+                        <TableCell align="left">{actionName}</TableCell>
+                        <TableCell align="left">{total}</TableCell>
+                        <TableCell align="left">{repemded}</TableCell>
+                        <TableCell align="left">
+                          <Label variant="ghost" color={(used === 'banned' && 'error') || 'success'}>
+                            {sentenceCase(used)}
+                          </Label>
+                        </TableCell>
+
                         <TableCell align="right">
                           <UserMoreMenu />
                         </TableCell>
