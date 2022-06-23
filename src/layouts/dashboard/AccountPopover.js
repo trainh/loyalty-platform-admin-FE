@@ -26,6 +26,14 @@ const MENU_OPTIONS = [
     icon: 'eva:settings-2-fill',
     linkTo: '#',
   },
+  
+];
+
+const MENU_OPTIONS1 = [
+  {
+    label: 'Logout',
+    linkTo: '/login',
+  },
 ];
 
 // ----------------------------------------------------------------------
@@ -89,7 +97,7 @@ export default function AccountPopover() {
           </Typography>
         </Box>
 
-        <Divider sx={{ borderStyle: 'dashed' }} />
+        <Divider sx={{ borderStyle: 'groove' }} />
 
         <Stack sx={{ p: 1 }}>
           {MENU_OPTIONS.map((option) => (
@@ -99,11 +107,17 @@ export default function AccountPopover() {
           ))}
         </Stack>
 
-        <Divider sx={{ borderStyle: 'dashed' }} />
-
-        <MenuItem onClick={handleClose} sx={{ m: 1 }}>
-          Logout
-        </MenuItem>
+        <Divider sx={{ borderStyle: 'groove' }} />
+          
+        <Stack sx={{ m: 1 }}>
+         {MENU_OPTIONS1.map((option) => (
+          <MenuItem   key={option.label} to = {option.linkTo} component={RouterLink} onClick={handleClose} >
+            {option.label}
+          </MenuItem>
+         ))}   
+        </Stack>
+        
+        
       </MenuPopover>
     </>
   );
