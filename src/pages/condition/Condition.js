@@ -137,7 +137,7 @@ export default function User() {
           <Typography variant="h4" gutterBottom>
             Condition
           </Typography>
-          <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
+          <Button variant="contained" component={RouterLink} to="/" startIcon={<Iconify icon="eva:plus-fill" />}>
             New Condition
           </Button>
         </Stack>
