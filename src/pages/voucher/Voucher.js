@@ -139,7 +139,12 @@ export default function User() {
           <Typography variant="h4" gutterBottom>
             Voucher
           </Typography>
-          <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
+          <Button
+            variant="contained"
+            component={RouterLink}
+            to="/voucher/new-voucher"
+            startIcon={<Iconify icon="eva:plus-fill" />}
+          >
             New Voucher
           </Button>
         </Stack>
