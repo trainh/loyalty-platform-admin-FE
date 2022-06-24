@@ -18,6 +18,7 @@ import {
   TablePagination,
 } from '@mui/material';
 // components
+import useOrganization from 'src/services/organization';
 import Page from '../components/Page';
 import Scrollbar from '../components/Scrollbar';
 import Iconify from '../components/Iconify';
@@ -79,6 +80,23 @@ export default function User() {
   const [filterName, setFilterName] = useState('');
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const { data } = useOrganization('http://13.232.213.53/api/v1/organizations');
+
+  console.log(data[0].name);
+
+  console.log('abc');
+
+  const obj = {
+    id: 1,
+    name: 'thien an',
+    grade: 1,
+  };
+
+  const jsonString = JSON.stringify(obj);
+  const objJSON = JSON.parse(jsonString);
+  console.log(objJSON.name);
+  console.log(obj);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';

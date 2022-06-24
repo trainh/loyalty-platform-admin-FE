@@ -18,6 +18,7 @@ import {
   TablePagination,
 } from '@mui/material';
 // components
+import useOrganization from 'src/services/organization';
 import Page from '../components/Page';
 import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
@@ -82,6 +83,10 @@ export default function User() {
   const [filterName, setFilterName] = useState('');
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const { data } = useOrganization('http://13.232.213.53/api/v1/memberships');
+
+  console.log(data);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
