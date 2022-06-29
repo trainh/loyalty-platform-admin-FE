@@ -5,13 +5,17 @@ import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 //
 import Membership from './pages/Membership';
 import Rule from './pages/rule/Rule';
+import NewProgram from './pages/program/NewProgram';
 import NewRule from './pages/rule/NewRule';
 import Voucher from './pages/voucher/Voucher';
+import Tier from './pages/tier/Tier';
+import Program from './pages/program/Program';
 import NewVoucher from './pages/voucher/NewVoucher';
 import Condition from './pages/condition/Condition';
-import NewCondition from './pages/condition/NewCondition';
-import Gift from './pages/gift/Gift';
-import NewGift from './pages/gift/NewGift';
+import NewConditionGroup from './pages/condition/NewConditionGroup';
+import NewConditionRule from './pages/condition/NewConditionRule';
+import Reward from './pages/reward/Reward';
+import NewReward from './pages/reward/NewReward';
 import Login from './pages/Login';
 import NotFound from './pages/Page404';
 import Register from './pages/Register';
@@ -27,16 +31,26 @@ export default function Router() {
       children: [
         { path: 'app', element: <DashboardApp /> },
         { path: 'membership', element: <Membership /> },
+        { path: 'tier', element: <Tier /> },
+        { path: 'program', element: <Program /> },
         { path: 'condition', element: <Condition /> },
         { path: 'rule', element: <Rule /> },
         { path: 'voucher', element: <Voucher /> },
-        { path: 'gift', element: <Gift /> },
+        { path: 'reward', element: <Reward /> },
       ],
+    },
+    {
+      path: '/program',
+      element: <DashboardLayout />,
+      children: [{ path: 'new-program', element: <NewProgram /> }],
     },
     {
       path: '/condition',
       element: <DashboardLayout />,
-      children: [{ path: 'new-condition', element: <NewCondition /> }],
+      children: [
+        { path: 'new-condition-group', element: <NewConditionGroup /> },
+        { path: 'new-condition-rule', element: <NewConditionRule /> },
+      ],
     },
     {
       path: '/rule',
@@ -49,9 +63,9 @@ export default function Router() {
       children: [{ path: 'new-voucher', element: <NewVoucher /> }],
     },
     {
-      path: '/gift',
+      path: '/reward',
       element: <DashboardLayout />,
-      children: [{ path: 'new-gift', element: <NewGift /> }],
+      children: [{ path: 'new-reward', element: <NewReward /> }],
     },
     {
       path: '/',

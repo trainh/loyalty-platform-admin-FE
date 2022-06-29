@@ -22,6 +22,11 @@ const navConfig = [
     icon: getIcon('fa6-solid:ranking-star'),
   },
   {
+    title: 'program',
+    path: '/dashboard/program',
+    icon: getIcon('mdi:format-list-bulleted-square'),
+  },
+  {
     title: 'condition',
     path: '/dashboard/condition',
     icon: getIcon('mdi:clipboard-text'),
@@ -37,14 +42,9 @@ const navConfig = [
     icon: getIcon('mdi:tag'),
   },
   {
-    title: 'gift',
-    path: '/dashboard/gift',
+    title: 'reward',
+    path: '/dashboard/reward',
     icon: getIcon('eva:gift-fill'),
-  },
-  {
-    title: 'promotion',
-    path: '/dashboard/promotion',
-    icon: getIcon('eva:percent-fill'),
   },
 ];
 

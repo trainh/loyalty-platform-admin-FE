@@ -131,19 +131,19 @@ export default function User() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="Condition">
+    <Page title="Program">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Condition
+            Program
           </Typography>
           <Button
             variant="contained"
             component={RouterLink}
-            to="/condition/new-condition-rule"
+            to="/program/new-program"
             startIcon={<Iconify icon="eva:plus-fill" />}
           >
-            New Condition
+            New Program
           </Button>
         </Stack>
 

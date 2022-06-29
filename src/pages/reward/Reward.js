@@ -130,19 +130,19 @@ export default function User() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="Gift">
+    <Page title="Reward">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Gift
+            Reward
           </Typography>
           <Button
             variant="contained"
             component={RouterLink}
-            to="/gift/new-gift"
+            to="/reward/new-reward"
             startIcon={<Iconify icon="eva:plus-fill" />}
           >
-            New Gift
+            New Reward
           </Button>
         </Stack>
 
