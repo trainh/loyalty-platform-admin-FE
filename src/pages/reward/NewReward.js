@@ -1,19 +1,12 @@
 import { Container, Button, TextField, Typography, Stack, Autocomplete } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import React from 'react';
-import { styled } from '@mui/material/styles';
 import Iconify from 'src/components/Iconify';
 
 import Page from '../../components/Page';
 
-// ----------------------------------------------------------------------
-
 const options = ['Active', 'Non-Active'];
 const optionType = ['HTML', 'JS', 'Java', 'Python'];
-
-const Input = styled('input')({
-  display: 'none',
-});
 
 export default function NewReward() {
   return (
@@ -30,7 +23,6 @@ export default function NewReward() {
         <div>
           <TextField
             sx={{
-              // ...style,
               mb: 2,
               mr: 2,
               width: { sm: 300 },
@@ -44,7 +36,6 @@ export default function NewReward() {
             inputProps={{
               style: {
                 height: 100,
-                // padding: '0 14px',
               },
             }}
             sx={{
@@ -57,7 +48,6 @@ export default function NewReward() {
             multiline
           />
         </div>
-        <br />
         <div>
           <Autocomplete
             options={options}
@@ -93,12 +83,12 @@ export default function NewReward() {
               />
             )}
           />
-          <div>
+          {/* <div>
             <Input accept="image/*" id="contained-button-file" multiple type="file" />
             <Button variant="contained" component="span">
               Upload
             </Button>
-          </div>
+          </div> */}
         </div>
         <div style={{ minHeight: '40vh' }}>Data</div>
       </Container>
