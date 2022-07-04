@@ -61,6 +61,8 @@ export default function NewCondition() {
             required
             multiline
           />
+        </div>
+        <div>
           <TextField
             label="Spending Value"
             id="outlined-start-adornment"
