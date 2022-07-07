@@ -205,7 +205,7 @@ export default function NewCondition() {
             </div>
           </BsCol>
           <BsCol
-            className={`position-relative border${readyToDrop ? ' bg-success' : ''}`}
+            className={`position-relative border${readyToDrop ? ' bg-white' : ''}`}
             style={{ height: containerHeight, overflow: 'auto' }}
           >
             <div

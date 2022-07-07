@@ -176,7 +176,7 @@ export default function NewReward() {
             </div>
           </BsCol>
           <BsCol
-            className={`position-relative border${readyToDrop ? ' bg-success' : ''}`}
+            className={`position-relative border${readyToDrop ? ' bg-white' : ''}`}
             style={{ height: containerHeight, overflow: 'auto' }}
           >
             <div
