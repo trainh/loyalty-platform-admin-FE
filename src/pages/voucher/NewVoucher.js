@@ -10,7 +10,7 @@ import Page from '../../components/Page';
 // ----------------------------------------------------------------------
 
 export default function NewVoucher() {
-  // const [valueDate, setValue] = useState(new Date('2018-01-01T00:00:00.000Z'));
+  const [valueDate, setValue] = useState(new Date('2018-01-01T00:00:00.000Z'));
 
   const [isDragging, setIsDragging] = useState(false);
   const [readyToDrop, setReadyToDrop] = useState(false);
@@ -93,7 +93,7 @@ export default function NewVoucher() {
     ));
 
   return (
-    <Page title="New Voucher">
+    <Page title="Condition Rule">
       <Container maxWidth="xl">
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>

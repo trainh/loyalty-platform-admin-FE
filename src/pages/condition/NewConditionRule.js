@@ -1,12 +1,28 @@
 import React, { useState } from 'react';
 
-import { Container, Button, TextField, Typography, Stack } from '@mui/material';
+import {
+  Container,
+  Button,
+  TextField,
+  Typography,
+  Stack,
+  Autocomplete,
+  Dialog,
+  Toolbar,
+  AppBar,
+  Divider,
+  List,
+  ListItem,
+  ListItemText,
+  IconButton,
+} from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDateTimePicker } from '@mui/x-date-pickers/DesktopDateTimePicker';
-import { Container as BsContainer, Row as BsRow, Col as BsCol, Form as BsForm } from 'react-bootstrap';
+import { Container as BsContainer, Row as BsRow, Col as BsCol } from 'react-bootstrap';
 import ClearIcon from '@mui/icons-material/Clear';
+
 import Iconify from '../../components/Iconify';
 import Page from '../../components/Page';
 
@@ -15,28 +31,38 @@ import Page from '../../components/Page';
 export default function NewCondition() {
   const [valueDate, setValue] = useState(new Date('2018-01-01T00:00:00.000Z'));
   // const options = ['Active', 'Non-Active'];
+  const compare = ['>', '>=', '=', '<', '<='];
 
   const [isDragging, setIsDragging] = useState(false);
   const [readyToDrop, setReadyToDrop] = useState(false);
   const [optionsEnd, setOptionsEnd] = useState([]);
+  const [open, setOpen] = useState(false);
   const isUnitItem = false;
   const containerHeight = 600;
 
-  const optionsOrderAmount = [
-    { value: 0, label: 'Discount' },
-    { value: 1, label: 'After Discount' },
+  const [optionsGroup, setOptionsGroup] = useState([
+    { value: 0, label: 'Order Amount Condition', isExpand: false },
+    { value: 1, label: 'Order Item Condition', isExpand: false },
+  ]);
+
+  const optionsStart = [
+    { value: 0, label: 'Discount', group: 0 },
+    { value: 1, label: 'After Discount', group: 0 },
+    { value: 2, label: 'Quantity', group: 1 },
+    { value: 3, label: 'Tier Sequence Number', group: 1 },
+    { value: 4, label: 'Quantity Gain Point', group: 1 },
+    { value: 5, label: 'Next Quantity', group: 1 },
   ];
 
-  // const optionsStart = [
-  //   { value: 0, label: 'Total Amount' },
-  //   { value: 1, label: 'Point' },
-  //   { value: 2, label: 'Redeemable Redemption' },
-  //   { value: 3, label: 'Redeemable Points' },
-  //   { value: 4, label: 'Redeemable Amounts' },
-  //   { value: 5, label: 'Status' },
-  // ];
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
 
-  const itemEnd = (value) => {
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const orderAmountEnd = (value) => {
     let result = null;
 
     switch (value) {
@@ -44,15 +70,15 @@ export default function NewCondition() {
         result = (
           <>
             <div>
-              <BsForm.Label style={{ color: 'black', fontSize: 19 }}>Discount</BsForm.Label>
+              <span style={{ color: 'black', fontSize: 19 }}>Discount</span>
             </div>
             <div>
-              <BsForm.Label style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Min Amount:</BsForm.Label>
+              <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Min Amount:</span>
               <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
-              &nbsp; <BsForm.Label style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Next Amount:</BsForm.Label>
+              &nbsp; <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Next Amount:</span>
               <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
               &nbsp;
-              <BsForm.Label style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Total Point:</BsForm.Label>
+              <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Total Point:</span>
               <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
             </div>
           </>
@@ -63,17 +89,106 @@ export default function NewCondition() {
         result = (
           <>
             <div>
-              <BsForm.Label style={{ color: 'black', fontSize: 19 }}>After Discount</BsForm.Label>
+              <span style={{ color: 'black', fontSize: 19 }}>After Discount</span>
             </div>
             <div>
-              <BsForm.Label style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Min Amount:</BsForm.Label>
+              <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Min Amount:</span>
               <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
-              &nbsp; <BsForm.Label style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Next Amount:</BsForm.Label>
+              &nbsp; <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Next Amount:</span>
               <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
               &nbsp;
-              <BsForm.Label style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Total Point:</BsForm.Label>
+              <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Total Point:</span>
               <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
             </div>
+          </>
+        );
+        break;
+
+      case 2:
+        result = (
+          <>
+            <div>
+              <span style={{ color: 'black', fontSize: 19 }}>each product in </span>
+              <Button onClick={handleClickOpen}>selection list</Button>
+              <span style={{ color: 'black', fontSize: 19 }}> has quantity </span>
+            </div>
+            <div>
+              <Autocomplete
+                // value={valueable}
+                // onChange={(event, valueable) => {
+                //   setValue(valueable);
+                // }}
+                options={compare}
+                renderInput={(params) => <TextField style={{ width: 95 }} {...params} variant="outlined" required />}
+              />
+              <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
+            </div>
+            {/* <div>
+              <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Min Amount:</span>
+              <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
+              &nbsp; <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Next Amount:</span>
+              <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
+              &nbsp;
+              <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Total Point:</span>
+              <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
+            </div> */}
+          </>
+        );
+        break;
+
+      case 3:
+        result = (
+          <>
+            <div>
+              <span style={{ color: 'black', fontSize: 19 }}>Tier Sequence Number</span>
+            </div>
+            {/* <div>
+              <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Min Amount:</span>
+              <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
+              &nbsp; <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Next Amount:</span>
+              <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
+              &nbsp;
+              <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Total Point:</span>
+              <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
+            </div> */}
+          </>
+        );
+        break;
+
+      case 4:
+        result = (
+          <>
+            <div>
+              <span style={{ color: 'black', fontSize: 19 }}>Quantity Gain Point</span>
+            </div>
+            {/* <div>
+              <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Min Amount:</span>
+              <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
+              &nbsp; <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Next Amount:</span>
+              <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
+              &nbsp;
+              <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Total Point:</span>
+              <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
+            </div> */}
+          </>
+        );
+        break;
+
+      case 5:
+        result = (
+          <>
+            <div>
+              <span style={{ color: 'black', fontSize: 19 }}>Next Quantity</span>
+            </div>
+            {/* <div>
+              <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Min Amount:</span>
+              <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
+              &nbsp; <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Next Amount:</span>
+              <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
+              &nbsp;
+              <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Total Point:</span>
+              <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
+            </div> */}
           </>
         );
         break;
@@ -84,34 +199,71 @@ export default function NewCondition() {
     return result;
   };
 
-  const renderListStart = () =>
-    optionsOrderAmount.map((v) => (
-      <div
-        key={v.label}
-        style={{ cursor: 'pointer', userSelect: 'none', borderRadius: 10, width: 250 }}
-        className="border p-2 mb-2"
-        draggable
-        onDragStart={() => setIsDragging(true)}
-        onDragEnd={() => {
-          if (readyToDrop) {
-            if (!isUnitItem || (isUnitItem && !optionsEnd.find((oe) => oe.value === v.value))) {
-              setOptionsEnd([...optionsEnd, v]);
-            }
-          }
+  const renderListStart = () => {
+    let renderingGroup = null;
 
-          setReadyToDrop(false);
-          setIsDragging(false);
-        }}
-      >
-        {v.label}
-      </div>
-    ));
+    return optionsStart.map((v) => {
+      const groupObj = optionsGroup.find((og) => og.value === v.group);
+      const groupValue = groupObj && groupObj.value;
+
+      const group = (
+        <div>
+          <Button
+            style={{ cursor: 'pointer', fontSize: 17 }}
+            onClick={() => {
+              if (groupObj) {
+                const newOptionsGroup = optionsGroup.map((og) =>
+                  og.value === groupValue ? { ...og, isExpand: !og.isExpand } : og
+                );
+
+                setOptionsGroup(newOptionsGroup);
+              }
+            }}
+          >
+            {groupObj && groupObj.label}
+          </Button>
+        </div>
+      );
+
+      const item = (
+        <div
+          style={{ cursor: 'pointer', userSelect: 'none', borderRadius: 10, width: 250 }}
+          className="border p-2 mb-2"
+          draggable
+          onDragStart={() => setIsDragging(true)}
+          onDragEnd={() => {
+            if (readyToDrop) {
+              if (!isUnitItem || (isUnitItem && !optionsEnd.find((oe) => oe.value === v.value))) {
+                setOptionsEnd([...optionsEnd, v]);
+              }
+            }
+
+            setReadyToDrop(false);
+            setIsDragging(false);
+          }}
+        >
+          {v.label}
+        </div>
+      );
+
+      const result = (
+        <div key={v.label}>
+          {renderingGroup !== groupValue && group}
+          {groupObj.isExpand && item}
+        </div>
+      );
+
+      renderingGroup = groupObj && groupObj.value;
+
+      return result;
+    });
+  };
 
   const renderListEnd = () =>
     optionsEnd.map((v, i) => (
       <div key={`${i}-${v.label}`} className="position-relative">
         <div style={{ cursor: 'pointer', userSelect: 'none', width: 'calc(100% - 32px)' }} className="p-1 mb-1">
-          {itemEnd(v.value)}
+          {orderAmountEnd(v.value)}
           {i < optionsEnd.length - 1 ? <div>Or</div> : null}
         </div>
         <ClearIcon
@@ -153,7 +305,7 @@ export default function NewCondition() {
             variant="outlined"
             required
           />
-          {/* <TextField
+          <TextField
             sx={{
               mb: 2,
               mr: 2,
@@ -169,7 +321,7 @@ export default function NewCondition() {
             variant="outlined"
             required
             multiline
-          /> */}
+          />
         </div>
         <div>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -223,15 +375,8 @@ export default function NewCondition() {
         <BsRow>
           <BsCol sm={4} style={{ height: containerHeight, overflow: 'auto' }}>
             <div className="p-4 border">
-              <BsForm.Label style={{ color: 'black', fontSize: 25, fontWeight: 'bold' }}>Conditions</BsForm.Label>
-              <div>
-                <BsForm.Label style={{ color: 'black', fontSize: 19 }}>Order Amount Condition</BsForm.Label>
-                {renderListStart()}
-              </div>
-              {/* <div>
-                <BsForm.Label style={{ color: 'black', fontSize: 20 }}>Order Item Condition</BsForm.Label>
-                {renderListStart()}
-              </div> */}
+              <span style={{ color: 'black', fontSize: 25, fontWeight: 'bold' }}>Conditions</span>
+              <div>{renderListStart()}</div>
             </div>
           </BsCol>
           <BsCol
@@ -249,6 +394,28 @@ export default function NewCondition() {
           </BsCol>
         </BsRow>
       </BsContainer>
+
+      <Dialog fullScreen open={open} onClose={handleClose}>
+        <AppBar sx={{ position: 'relative' }}>
+          <Toolbar>
+            <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
+              <ClearIcon />
+            </IconButton>
+            <Button autoFocus color="inherit">
+              Save
+            </Button>
+          </Toolbar>
+        </AppBar>
+        <List>
+          <ListItem button>
+            <ListItemText primary="Phone ringtone" secondary="Titania" />
+          </ListItem>
+          <Divider />
+          <ListItem button>
+            <ListItemText primary="Default notification ringtone" secondary="Tethys" />
+          </ListItem>
+        </List>
+      </Dialog>
     </Page>
   );
 }
