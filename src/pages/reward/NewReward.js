@@ -21,9 +21,15 @@ export default function NewReward() {
   const isUnitItem = false;
   const containerHeight = 400;
 
+  const [optionsGroup, setOptionsGroup] = useState([
+    { value: 0, label: 'Reward Sub-menu 1', isExpand: false },
+    { value: 1, label: 'Reward Sub-menu 2', isExpand: false },
+  ]);
+
   const optionsStart = [
-    { value: 0, label: 'Stock' },
-    { value: 1, label: 'Redeemed' },
+    { value: 0, label: 'Item Reward 1', group: 0 },
+    { value: 1, label: 'Item Reward 2', group: 0 },
+    { value: 2, label: 'Item Reward 3', group: 1 },
   ];
 
   const itemEnd = (value) => {
@@ -31,26 +37,59 @@ export default function NewReward() {
 
     switch (value) {
       case 0:
-        result = 'selection...';
+        result = (
+          <span className="d-flex align-items-center">
+            <span style={{ color: 'black', fontSize: 14, marginBottom: 1 }} className="mr-1">
+              Reward:
+            </span>
+            <span style={{ color: '#1266F1', fontSize: 14 }} className="m-1">
+              Reward Point:
+            </span>
+            <TextField style={{ width: 100 }} size="small" id="outlined-number" label="Point" type="number" required />
+          </span>
+        );
         break;
 
       case 1:
         result = (
-          <Autocomplete
-            options={options}
-            renderInput={(params) => (
-              <TextField
-                sx={{
-                  width: { sm: 150 },
-                  height: { sm: 50 },
-                }}
-                {...params}
-                label="Status"
-                variant="outlined"
-                required
-              />
-            )}
-          />
+          <div div className="d-flex align-items-center">
+            <span style={{ color: 'black', fontSize: 14, marginBottom: 1 }}>Each Reward </span>
+            {/* <Button onClick={() => handleClickOpen(index)}>selection list ({item.selectList.length})</Button>
+            <span style={{ color: 'black', fontSize: 14 }}> has quantity </span> */}
+            <Autocomplete
+              // value={valueable}
+              // onChange={(event, valueable) => {
+              //   setValue(valueable);
+              // }}
+              size="small"
+              className="mx-1"
+              options={options}
+              renderInput={(params) => <TextField style={{ width: 162 }} {...params} variant="outlined" required />}
+            />
+            <TextField
+              style={{ width: 100 }}
+              className="mx-1"
+              size="small"
+              id="outlined-number"
+              label="Point"
+              type="number"
+              required
+            />
+          </div>
+        );
+        break;
+
+      case 2:
+        result = (
+          <span className="d-flex align-items-center">
+            <span style={{ color: 'black', fontSize: 14, marginBottom: 1 }} className="mr-1">
+              Reward Label dnd:
+            </span>
+            <span style={{ color: '#1266F1', fontSize: 14 }} className="m-1">
+              Reward Point:
+            </span>
+            <TextField style={{ width: 100 }} size="small" id="outlined-number" label="Point" type="number" required />
+          </span>
         );
         break;
 
@@ -60,28 +99,65 @@ export default function NewReward() {
     return result;
   };
 
-  const renderListStart = () =>
-    optionsStart.map((v) => (
-      <div
-        key={v.label}
-        style={{ cursor: 'pointer', userSelect: 'none', borderRadius: 10, width: 150 }}
-        className="border p-2 mb-2"
-        draggable
-        onDragStart={() => setIsDragging(true)}
-        onDragEnd={() => {
-          if (readyToDrop) {
-            if (!isUnitItem || (isUnitItem && !optionsEnd.find((oe) => oe.value === v.value))) {
-              setOptionsEnd([...optionsEnd, v]);
-            }
-          }
+  const renderListStart = () => {
+    let renderingGroup = null;
 
-          setReadyToDrop(false);
-          setIsDragging(false);
-        }}
-      >
-        {v.label}
-      </div>
-    ));
+    return optionsStart.map((v) => {
+      const groupObj = optionsGroup.find((og) => og.value === v.group);
+      const groupValue = groupObj && groupObj.value;
+
+      const group = (
+        <div>
+          <Button
+            style={{ cursor: 'pointer', fontSize: 17 }}
+            onClick={() => {
+              if (groupObj) {
+                const newOptionsGroup = optionsGroup.map((og) =>
+                  og.value === groupValue ? { ...og, isExpand: !og.isExpand } : og
+                );
+
+                setOptionsGroup(newOptionsGroup);
+              }
+            }}
+          >
+            {groupObj && groupObj.label}
+          </Button>
+        </div>
+      );
+
+      const item = (
+        <div
+          style={{ cursor: 'pointer', userSelect: 'none', borderRadius: 10, width: 250 }}
+          className="border p-2 mb-2"
+          draggable
+          onDragStart={() => setIsDragging(true)}
+          onDragEnd={() => {
+            if (readyToDrop) {
+              if (!isUnitItem || (isUnitItem && !optionsEnd.find((oe) => oe.value === v.value))) {
+                setOptionsEnd([...optionsEnd, v]);
+              }
+            }
+
+            setReadyToDrop(false);
+            setIsDragging(false);
+          }}
+        >
+          {v.label}
+        </div>
+      );
+
+      const result = (
+        <div key={v.label}>
+          {renderingGroup !== groupValue && group}
+          {groupObj.isExpand && item}
+        </div>
+      );
+
+      renderingGroup = groupObj && groupObj.value;
+
+      return result;
+    });
+  };
 
   const renderListEnd = () =>
     optionsEnd.map((v, i) => (
@@ -92,7 +168,7 @@ export default function NewReward() {
         </div>
         <ClearIcon
           className="position-absolute"
-          style={{ top: 5, right: 0, cursor: 'pointer' }}
+          style={{ top: 14, right: 0, cursor: 'pointer' }}
           onClick={() => {
             const result = optionsEnd.filter((_, opIndex) => opIndex !== i);
             setOptionsEnd(result);
@@ -141,22 +217,6 @@ export default function NewReward() {
           />
         </div>
         <div>
-          <Autocomplete
-            options={options}
-            renderInput={(params) => (
-              <TextField
-                sx={{
-                  mb: 2,
-                  mr: 10,
-                  width: { sm: 180 },
-                }}
-                {...params}
-                label="Status"
-                variant="outlined"
-                required
-              />
-            )}
-          />
           <BsForm.Label>
             <Input accept="image/*" id="contained-button-file" multiple type="file" />
             <IconButton color="primary" aria-label="upload picture" component="span">
@@ -165,14 +225,12 @@ export default function NewReward() {
           </BsForm.Label>
         </div>
       </Container>
-      <BsContainer fluid style={{ height: 400 }}>
+      <BsContainer fluid style={{ height: 400, marginTop: 15 }}>
         <BsRow>
-          <BsCol sm={4} style={{ height: containerHeight, overflow: 'auto' }}>
-            <div className="p-4 border">
-              <BsForm.Label htmlFor="inputPassword5" style={{ color: 'black', fontSize: 25, fontWeight: 'bold' }}>
-                Information
-              </BsForm.Label>
-              {renderListStart()}
+          <BsCol sm={3} style={{ height: containerHeight, overflow: 'auto' }}>
+            <div className="p-2 border">
+              <span style={{ color: 'black', fontSize: 25, fontWeight: 'bold' }}>Reward Menu</span>
+              <div>{renderListStart()}</div>
             </div>
           </BsCol>
           <BsCol

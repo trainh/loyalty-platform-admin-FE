@@ -10,12 +10,13 @@ import {
   Dialog,
   Toolbar,
   AppBar,
-  Divider,
+  // Divider,
   List,
-  ListItem,
-  ListItemText,
+  // ListItem,
+  // ListItemText,
   IconButton,
 } from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
 import { Link as RouterLink } from 'react-router-dom';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -29,14 +30,32 @@ import Page from '../../components/Page';
 // ----------------------------------------------------------------------
 
 export default function NewCondition() {
+  const columns = [
+    { field: 'id', headerName: 'ID', width: 70 },
+    { field: 'name', headerName: 'Name', width: 130 },
+  ];
+
+  const rows = [
+    { id: 1, name: 'Snow' },
+    { id: 2, name: 'Lannister' },
+    { id: 3, name: 'Lannister' },
+    { id: 4, name: 'Stark' },
+    { id: 5, name: 'Targaryen' },
+    { id: 6, name: 'Melisandre' },
+    { id: 7, name: 'Clifford' },
+    { id: 8, name: 'Frances' },
+    { id: 9, name: 'Roxie' },
+  ];
+
   const [valueDate, setValue] = useState(new Date('2018-01-01T00:00:00.000Z'));
-  // const options = ['Active', 'Non-Active'];
   const compare = ['>', '>=', '=', '<', '<='];
 
   const [isDragging, setIsDragging] = useState(false);
   const [readyToDrop, setReadyToDrop] = useState(false);
   const [optionsEnd, setOptionsEnd] = useState([]);
   const [open, setOpen] = useState(false);
+  const [editingIndex, setEditingIndex] = useState(-1);
+  const [selectionModel, setSelectionModel] = useState([]);
   const isUnitItem = false;
   const containerHeight = 600;
 
@@ -48,148 +67,98 @@ export default function NewCondition() {
   const optionsStart = [
     { value: 0, label: 'Discount', group: 0 },
     { value: 1, label: 'After Discount', group: 0 },
-    { value: 2, label: 'Quantity', group: 1 },
-    { value: 3, label: 'Tier Sequence Number', group: 1 },
-    { value: 4, label: 'Quantity Gain Point', group: 1 },
-    { value: 5, label: 'Next Quantity', group: 1 },
+    { value: 2, label: 'Quantity', group: 1, selectList: [] },
   ];
 
-  const handleClickOpen = () => {
+  const handleClickOpen = (index) => {
+    setEditingIndex(index);
+    setSelectionModel(optionsEnd[index].selectList);
     setOpen(true);
   };
 
   const handleClose = () => {
+    setEditingIndex(-1);
+    setSelectionModel([]);
     setOpen(false);
   };
 
-  const orderAmountEnd = (value) => {
+  // "v" Must be a object
+  const cloneDeep = (v) => JSON.parse(JSON.stringify(v));
+
+  const orderAmountEnd = (item, index) => {
     let result = null;
 
-    switch (value) {
+    switch (item.value) {
       case 0:
         result = (
-          <>
-            <div>
-              <span style={{ color: 'black', fontSize: 19 }}>Discount</span>
-            </div>
-            <div>
-              <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Min Amount:</span>
-              <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
-              &nbsp; <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Next Amount:</span>
-              <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
-              &nbsp;
-              <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Total Point:</span>
-              <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
-            </div>
-          </>
+          <span className="d-flex align-items-center">
+            <span style={{ color: 'black', fontSize: 14, marginBottom: 1 }} className="mr-1">
+              Discount:
+            </span>
+            <span style={{ color: '#1266F1', fontSize: 14 }} className="m-1">
+              Min Amount:
+            </span>
+            <TextField style={{ width: 100 }} size="small" id="outlined-number" label="Point" type="number" required />
+            <span style={{ color: '#1266F1', fontSize: 14 }} className="m-1">
+              Next Amount:
+            </span>
+            <TextField style={{ width: 100 }} size="small" id="outlined-number" label="Point" type="number" required />
+            <span style={{ color: '#1266F1', fontSize: 14 }} className="m-1">
+              Total Point:
+            </span>
+            <TextField style={{ width: 100 }} size="small" id="outlined-number" label="Point" type="number" required />
+          </span>
         );
         break;
 
       case 1:
         result = (
-          <>
-            <div>
-              <span style={{ color: 'black', fontSize: 19 }}>After Discount</span>
-            </div>
-            <div>
-              <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Min Amount:</span>
-              <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
-              &nbsp; <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Next Amount:</span>
-              <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
-              &nbsp;
-              <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Total Point:</span>
-              <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
-            </div>
-          </>
+          <span className="d-flex align-items-center">
+            <span style={{ color: 'black', fontSize: 14, marginBottom: 1 }} className="mr-1">
+              After Discount:
+            </span>
+            <span style={{ color: '#1266F1', fontSize: 14 }} className="m-1">
+              Min Amount:
+            </span>
+            <TextField style={{ width: 100 }} size="small" id="outlined-number" label="Point" type="number" required />
+            <span style={{ color: '#1266F1', fontSize: 14 }} className="m-1">
+              Next Amount:
+            </span>
+            <TextField style={{ width: 100 }} size="small" id="outlined-number" label="Point" type="number" required />
+            <span style={{ color: '#1266F1', fontSize: 14 }} className="m-1">
+              Total Point:
+            </span>
+            <TextField style={{ width: 100 }} size="small" id="outlined-number" label="Point" type="number" required />
+          </span>
         );
         break;
 
       case 2:
         result = (
-          <>
-            <div>
-              <span style={{ color: 'black', fontSize: 19 }}>each product in </span>
-              <Button onClick={handleClickOpen}>selection list</Button>
-              <span style={{ color: 'black', fontSize: 19 }}> has quantity </span>
-            </div>
-            <div>
-              <Autocomplete
-                // value={valueable}
-                // onChange={(event, valueable) => {
-                //   setValue(valueable);
-                // }}
-                options={compare}
-                renderInput={(params) => <TextField style={{ width: 95 }} {...params} variant="outlined" required />}
-              />
-              <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
-            </div>
-            {/* <div>
-              <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Min Amount:</span>
-              <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
-              &nbsp; <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Next Amount:</span>
-              <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
-              &nbsp;
-              <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Total Point:</span>
-              <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
-            </div> */}
-          </>
-        );
-        break;
-
-      case 3:
-        result = (
-          <>
-            <div>
-              <span style={{ color: 'black', fontSize: 19 }}>Tier Sequence Number</span>
-            </div>
-            {/* <div>
-              <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Min Amount:</span>
-              <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
-              &nbsp; <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Next Amount:</span>
-              <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
-              &nbsp;
-              <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Total Point:</span>
-              <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
-            </div> */}
-          </>
-        );
-        break;
-
-      case 4:
-        result = (
-          <>
-            <div>
-              <span style={{ color: 'black', fontSize: 19 }}>Quantity Gain Point</span>
-            </div>
-            {/* <div>
-              <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Min Amount:</span>
-              <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
-              &nbsp; <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Next Amount:</span>
-              <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
-              &nbsp;
-              <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Total Point:</span>
-              <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
-            </div> */}
-          </>
-        );
-        break;
-
-      case 5:
-        result = (
-          <>
-            <div>
-              <span style={{ color: 'black', fontSize: 19 }}>Next Quantity</span>
-            </div>
-            {/* <div>
-              <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Min Amount:</span>
-              <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
-              &nbsp; <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Next Amount:</span>
-              <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
-              &nbsp;
-              <span style={{ color: '#1266F1', fontSize: 15, padding: 15 }}>Total Point:</span>
-              <TextField style={{ width: 100 }} id="outlined-number" label="Point" type="number" required />
-            </div> */}
-          </>
+          <div div className="d-flex align-items-center">
+            <span style={{ color: 'black', fontSize: 14, marginBottom: 1 }}>Each product in </span>
+            <Button onClick={() => handleClickOpen(index)}>selection list ({item.selectList.length})</Button>
+            <span style={{ color: 'black', fontSize: 14 }}> has quantity </span>
+            <Autocomplete
+              // value={valueable}
+              // onChange={(event, valueable) => {
+              //   setValue(valueable);
+              // }}
+              size="small"
+              className="mx-1"
+              options={compare}
+              renderInput={(params) => <TextField style={{ width: 95 }} {...params} variant="outlined" required />}
+            />
+            <TextField
+              style={{ width: 100 }}
+              className="mx-1"
+              size="small"
+              id="outlined-number"
+              label="Point"
+              type="number"
+              required
+            />
+          </div>
         );
         break;
 
@@ -263,12 +232,12 @@ export default function NewCondition() {
     optionsEnd.map((v, i) => (
       <div key={`${i}-${v.label}`} className="position-relative">
         <div style={{ cursor: 'pointer', userSelect: 'none', width: 'calc(100% - 32px)' }} className="p-1 mb-1">
-          {orderAmountEnd(v.value)}
+          {orderAmountEnd(v, i)}
           {i < optionsEnd.length - 1 ? <div>Or</div> : null}
         </div>
         <ClearIcon
           className="position-absolute"
-          style={{ top: 5, right: 0, cursor: 'pointer' }}
+          style={{ top: 14, right: 0, cursor: 'pointer' }}
           onClick={() => {
             const result = optionsEnd.filter((_, opIndex) => opIndex !== i);
             setOptionsEnd(result);
@@ -373,8 +342,8 @@ export default function NewCondition() {
       </Container>
       <BsContainer fluid style={{ height: 400, marginTop: 15 }}>
         <BsRow>
-          <BsCol sm={4} style={{ height: containerHeight, overflow: 'auto' }}>
-            <div className="p-4 border">
+          <BsCol sm={3} style={{ height: containerHeight, overflow: 'auto' }}>
+            <div className="p-2 border">
               <span style={{ color: 'black', fontSize: 25, fontWeight: 'bold' }}>Conditions</span>
               <div>{renderListStart()}</div>
             </div>
@@ -394,26 +363,44 @@ export default function NewCondition() {
           </BsCol>
         </BsRow>
       </BsContainer>
-
       <Dialog fullScreen open={open} onClose={handleClose}>
         <AppBar sx={{ position: 'relative' }}>
           <Toolbar>
             <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
               <ClearIcon />
             </IconButton>
-            <Button autoFocus color="inherit">
-              Save
+            <Button
+              color="inherit"
+              onClick={() => {
+                const newOptionEnd = cloneDeep(optionsEnd);
+                newOptionEnd[editingIndex].selectList = selectionModel;
+                setOptionsEnd(newOptionEnd);
+
+                handleClose();
+              }}
+            >
+              Select Product
             </Button>
           </Toolbar>
         </AppBar>
         <List>
-          <ListItem button>
-            <ListItemText primary="Phone ringtone" secondary="Titania" />
-          </ListItem>
-          <Divider />
-          <ListItem button>
-            <ListItemText primary="Default notification ringtone" secondary="Tethys" />
-          </ListItem>
+          <div style={{ textAlign: 'center', marginBottom: 5 }}>
+            <span style={{ fontSize: 35, fontWeight: 'bold' }}>List Product</span>
+          </div>
+          <div style={{ height: 400, width: '100%' }}>
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              pageSize={5}
+              rowsPerPageOptions={[5]}
+              checkboxSelection
+              disableSelectionOnClick
+              onSelectionModelChange={(newSelectionModel) => {
+                setSelectionModel(newSelectionModel);
+              }}
+              selectionModel={selectionModel}
+            />
+          </div>
         </List>
       </Dialog>
     </Page>
