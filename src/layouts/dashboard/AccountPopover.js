@@ -1,3 +1,4 @@
+import { logout } from 'src/fire/fireBaseConfi';
 import { useRef, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
@@ -111,7 +112,7 @@ export default function AccountPopover() {
           
         <Stack sx={{ m: 1 }}>
          {MENU_OPTIONS1.map((option) => (
-          <MenuItem   key={option.label} to = {option.linkTo} component={RouterLink} onClick={handleClose} >
+          <MenuItem   key={option.label} to = {option.linkTo} component={RouterLink} onClick={logout} >
             {option.label}
           </MenuItem>
          ))}   
