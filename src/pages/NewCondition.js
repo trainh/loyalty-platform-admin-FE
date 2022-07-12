@@ -10,26 +10,23 @@ import {
   Dialog,
   Toolbar,
   AppBar,
-  // Divider,
   List,
-  // ListItem,
-  // ListItemText,
   IconButton,
 } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { Link as RouterLink } from 'react-router-dom';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DesktopDateTimePicker } from '@mui/x-date-pickers/DesktopDateTimePicker';
+
 import { Container as BsContainer, Row as BsRow, Col as BsCol } from 'react-bootstrap';
 import ClearIcon from '@mui/icons-material/Clear';
 
-import Iconify from '../../components/Iconify';
-import Page from '../../components/Page';
+import Iconify from '../components/Iconify';
+import Page from '../components/Page';
 
 // ----------------------------------------------------------------------
 
 export default function NewCondition() {
+  const condition = ['Condition Rule', 'Condition Rule 1'];
+
   const columns = [
     { field: 'id', headerName: 'ID', width: 70 },
     { field: 'name', headerName: 'Name', width: 130 },
@@ -47,7 +44,6 @@ export default function NewCondition() {
     { id: 9, name: 'Roxie' },
   ];
 
-  const [valueDate, setValue] = useState(new Date('2018-01-01T00:00:00.000Z'));
   const compare = ['>', '>=', '=', '<', '<='];
 
   const [isDragging, setIsDragging] = useState(false);
@@ -247,166 +243,99 @@ export default function NewCondition() {
     ));
 
   return (
-    <Page title="Condition Rule">
+    <Page title="New Condition">
       <Container maxWidth="xl">
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Condition Rule
+            New Condition
           </Typography>
-          <span>
-            <Button
-              style={{ marginRight: 5 }}
-              variant="contained"
-              component={RouterLink}
-              to="/condition/new-condition-group"
-              startIcon={<Iconify icon="mdi:arrow-left-thin" />}
-            >
-              Back
-            </Button>
-            <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="mdi:content-save" />}>
-              Save
-            </Button>
-          </span>
-        </Stack>
-        <BsContainer fluid style={{ marginTop: 15 }}>
-          <TextField
-            sx={{
-              mr: 2,
-              width: { sm: 290 },
-            }}
-            id="outlined-basic"
-            label="Name"
-            variant="outlined"
-            required
-          />
-          <TextField
-            sx={{
-              mb: 3,
-              width: { sm: 750 },
-            }}
-            inputProps={{
-              style: {
-                height: 100,
-              },
-            }}
-            id="outlined-basic"
-            label="Description"
-            variant="outlined"
-            required
-            multiline
-          />
-        </BsContainer>
-        <BsContainer fluid style={{ marginRight: 15 }}>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <span>
-              <span>
-                <DesktopDateTimePicker
-                  disabled
-                  label="Start Date"
-                  value={valueDate}
-                  minDate={new Date('2017-01-01')}
-                  onChange={(newValue) => {
-                    setValue(newValue);
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      sx={{
-                        mr: 2,
-                        width: { sm: 290 },
-                      }}
-                      {...params}
-                      required
-                    />
-                  )}
-                />
-              </span>
-              <span>
-                <DesktopDateTimePicker
-                  label="End Date"
-                  value={valueDate}
-                  minDate={new Date('2017-01-01')}
-                  onChange={(newValue) => {
-                    setValue(newValue);
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      sx={{
-                        mb: 1,
-                        width: { sm: 290 },
-                      }}
-                      {...params}
-                      required
-                    />
-                  )}
-                />
-              </span>
-            </span>
-          </LocalizationProvider>
-        </BsContainer>
-      </Container>
-      <BsContainer fluid style={{ height: 350, marginTop: 15 }}>
-        <BsRow>
-          <BsCol sm={3} style={{ height: containerHeight, overflow: 'auto' }}>
-            <div className="p-2 border">
-              <span style={{ color: 'black', fontSize: 25, fontWeight: 'bold' }}>Conditions</span>
-              <div>{renderListStart()}</div>
-            </div>
-          </BsCol>
-          <BsCol
-            className={`position-relative border${readyToDrop ? ' bg-white' : ''}`}
-            style={{ height: containerHeight, overflow: 'auto' }}
+          <Button
+            variant="contained"
+            component={RouterLink}
+            to="/condition/new-condition-rule"
+            startIcon={<Iconify icon="mdi:content-save" />}
           >
-            <div
-              className="position-absolute"
-              style={{ inset: 0, zIndex: isDragging ? 1 : 0 }}
-              onDragOver={(e) => e.preventDefault()}
-              onDragEnter={() => setReadyToDrop(true)}
-              onDragLeave={() => setReadyToDrop(false)}
+            Save
+          </Button>
+        </Stack>
+        <BsContainer fluid>
+          <BsRow>
+            <Autocomplete
+              // value={valueable}
+              // onChange={(event, valueable) => {
+              //   setValue(valueable);
+              // }}
+              // size="small"
+              style={{ marginBottom: 15 }}
+              // className="mx-1"
+              options={condition}
+              renderInput={(params) => <TextField style={{ width: 300 }} {...params} variant="outlined" required />}
             />
-            {<div className="p-4">{renderListEnd()}</div>}
-          </BsCol>
-        </BsRow>
-      </BsContainer>
-      <Dialog fullScreen open={open} onClose={handleClose}>
-        <AppBar sx={{ position: 'relative' }}>
-          <Toolbar>
-            <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
-              <ClearIcon />
-            </IconButton>
-            <Button
-              color="inherit"
-              onClick={() => {
-                const newOptionEnd = cloneDeep(optionsEnd);
-                newOptionEnd[editingIndex].selectList = selectionModel;
-                setOptionsEnd(newOptionEnd);
-
-                handleClose();
-              }}
+          </BsRow>
+        </BsContainer>
+        <BsContainer fluid style={{ height: 350, marginTop: 15 }}>
+          <BsRow>
+            <BsCol sm={3} style={{ height: containerHeight, overflow: 'auto' }}>
+              <div className="p-2 border">
+                <span style={{ color: 'black', fontSize: 25, fontWeight: 'bold' }}>Conditions</span>
+                <div>{renderListStart()}</div>
+              </div>
+            </BsCol>
+            <BsCol
+              className={`position-relative border${readyToDrop ? ' bg-white' : ''}`}
+              style={{ height: containerHeight, overflow: 'auto' }}
             >
-              Select Product
-            </Button>
-          </Toolbar>
-        </AppBar>
-        <List>
-          <div style={{ textAlign: 'center', marginBottom: 5 }}>
-            <span style={{ fontSize: 35, fontWeight: 'bold' }}>List Product</span>
-          </div>
-          <div style={{ height: 400, width: '100%' }}>
-            <DataGrid
-              rows={rows}
-              columns={columns}
-              pageSize={5}
-              rowsPerPageOptions={[5]}
-              checkboxSelection
-              disableSelectionOnClick
-              onSelectionModelChange={(newSelectionModel) => {
-                setSelectionModel(newSelectionModel);
-              }}
-              selectionModel={selectionModel}
-            />
-          </div>
-        </List>
-      </Dialog>
+              <div
+                className="position-absolute"
+                style={{ inset: 0, zIndex: isDragging ? 1 : 0 }}
+                onDragOver={(e) => e.preventDefault()}
+                onDragEnter={() => setReadyToDrop(true)}
+                onDragLeave={() => setReadyToDrop(false)}
+              />
+              {<div className="p-4">{renderListEnd()}</div>}
+            </BsCol>
+          </BsRow>
+        </BsContainer>
+        <Dialog fullScreen open={open} onClose={handleClose}>
+          <AppBar sx={{ position: 'relative' }}>
+            <Toolbar>
+              <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
+                <ClearIcon />
+              </IconButton>
+              <Button
+                color="inherit"
+                onClick={() => {
+                  const newOptionEnd = cloneDeep(optionsEnd);
+                  newOptionEnd[editingIndex].selectList = selectionModel;
+                  setOptionsEnd(newOptionEnd);
+                  handleClose();
+                }}
+              >
+                Select Product
+              </Button>
+            </Toolbar>
+          </AppBar>
+          <List>
+            <div style={{ textAlign: 'center', marginBottom: 5 }}>
+              <span style={{ fontSize: 35, fontWeight: 'bold' }}>List Product</span>
+            </div>
+            <div style={{ height: 400, width: '100%' }}>
+              <DataGrid
+                rows={rows}
+                columns={columns}
+                pageSize={5}
+                rowsPerPageOptions={[5]}
+                checkboxSelection
+                disableSelectionOnClick
+                onSelectionModelChange={(newSelectionModel) => {
+                  setSelectionModel(newSelectionModel);
+                }}
+                selectionModel={selectionModel}
+              />
+            </div>
+          </List>
+        </Dialog>
+      </Container>
     </Page>
   );
 }

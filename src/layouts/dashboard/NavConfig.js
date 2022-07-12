@@ -37,6 +37,11 @@ const navConfig = [
     icon: getIcon('clarity:note-solid'),
   },
   {
+    title: 'new condition',
+    path: '/dashboard/new-condition',
+    icon: getIcon('mdi:note-alert'),
+  },
+  {
     title: 'voucher',
     path: '/dashboard/voucher',
     icon: getIcon('mdi:tag'),

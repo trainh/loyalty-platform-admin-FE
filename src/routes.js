@@ -20,6 +20,7 @@ import Login from './pages/Login';
 import NotFound from './pages/Page404';
 import Register from './pages/Register';
 import DashboardApp from './pages/DashboardApp';
+import NewCondition from './pages/NewCondition';
 
 // ----------------------------------------------------------------------
 
@@ -35,6 +36,7 @@ export default function Router() {
         { path: 'program', element: <Program /> },
         { path: 'condition', element: <Condition /> },
         { path: 'rule', element: <Rule /> },
+        { path: 'new-condition', element: <NewCondition /> },
         { path: 'voucher', element: <Voucher /> },
         { path: 'reward', element: <Reward /> },
       ],
