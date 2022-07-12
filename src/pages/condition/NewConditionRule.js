@@ -57,7 +57,7 @@ export default function NewCondition() {
   const [editingIndex, setEditingIndex] = useState(-1);
   const [selectionModel, setSelectionModel] = useState([]);
   const isUnitItem = false;
-  const containerHeight = 600;
+  const containerHeight = 400;
 
   const [optionsGroup, setOptionsGroup] = useState([
     { value: 0, label: 'Order Amount Condition', isExpand: false },

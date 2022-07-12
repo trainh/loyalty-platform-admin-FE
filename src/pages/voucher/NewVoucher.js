@@ -17,7 +17,7 @@ export default function NewVoucher() {
   const [readyToDrop, setReadyToDrop] = useState(false);
   const [optionsEnd, setOptionsEnd] = useState([]);
   const isUnitItem = false;
-  const containerHeight = 600;
+  const containerHeight = 400;
 
   const [optionsGroup, setOptionsGroup] = useState([
     { value: 0, label: 'Voucher Sub-menu 1', isExpand: false },

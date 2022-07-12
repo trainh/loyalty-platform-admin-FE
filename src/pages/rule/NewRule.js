@@ -16,7 +16,7 @@ export default function NewRule() {
   const [readyToDrop, setReadyToDrop] = useState(false);
   const [optionsEnd, setOptionsEnd] = useState([]);
   const isUnitItem = false;
-  const containerHeight = 600;
+  const containerHeight = 400;
 
   const options = ['Active', 'Non-Active'];
 
