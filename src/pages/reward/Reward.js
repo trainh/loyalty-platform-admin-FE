@@ -6,6 +6,7 @@ import axios from 'axios';
 import { DataGrid } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
+import { sentenceCase } from 'change-case';
 // material
 import {
   Card,
@@ -23,6 +24,7 @@ import {
 } from '@mui/material';
 // components
 import Page from '../../components/Page';
+import Label from '../../components/Label';
 import Scrollbar from '../../components/Scrollbar';
 import Iconify from '../../components/Iconify';
 import SearchNotFound from '../../components/SearchNotFound';
@@ -31,7 +33,6 @@ import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/@das
 import USERLIST from '../../_mock/user';
 
 // ----------------------------------------------------------------------
-
 // const TABLE_HEAD = [
 //   { id: 'no', label: 'No', alignRight: false },
 //   { id: 'name', label: 'Name', alignRight: false },
@@ -261,16 +262,6 @@ export default function Reward() {
               />
             </div>
           </Scrollbar>
-
-          {/* <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={USERLIST.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          /> */}
         </Card>
       </Container>
     </Page>

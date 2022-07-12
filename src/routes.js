@@ -5,6 +5,7 @@ import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 //
 import Membership from './pages/Membership';
 import Rule from './pages/rule/Rule';
+import NewProgram from './pages/program/NewProgram';
 import NewRule from './pages/rule/NewRule';
 import Voucher from './pages/voucher/Voucher';
 import Tier from './pages/tier/Tier';
@@ -13,6 +14,9 @@ import NewVoucher from './pages/voucher/NewVoucher';
 import Condition from './pages/condition/Condition';
 import Action from './pages/action/Action';
 import NewCondition from './pages/condition/NewCondition';
+import Program from './pages/program/Program';
+import NewConditionGroup from './pages/condition/NewConditionGroup';
+import NewConditionRule from './pages/condition/NewConditionRule';
 import Reward from './pages/reward/Reward';
 import NewReward from './pages/reward/NewReward';
 import Login from './pages/Login';
@@ -30,6 +34,8 @@ export default function Router() {
       children: [
         { path: 'app', element: <DashboardApp /> },
         { path: 'membership', element: <Membership /> },
+        { path: 'tier', element: <Tier /> },
+        { path: 'program', element: <Program /> },
         { path: 'condition', element: <Condition /> },
         { path: 'rule', element: <Rule /> },
         { path: 'voucher', element: <Voucher /> },
@@ -44,9 +50,17 @@ export default function Router() {
       children: [{ path: 'new-condition', element: <NewCondition /> }],
     },
     {
+      path: '/program',
+      element: <DashboardLayout />,
+      children: [{ path: 'new-program', element: <NewProgram /> }],
+    },
+    {
       path: '/condition',
       element: <DashboardLayout />,
-      children: [{ path: 'new-condition', element: <NewCondition /> }],
+      children: [
+        { path: 'new-condition-group', element: <NewConditionGroup /> },
+        { path: 'new-condition-rule', element: <NewConditionRule /> },
+      ],
     },
     {
       path: '/rule',

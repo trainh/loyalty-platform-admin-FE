@@ -225,7 +225,7 @@ export default function User() {
           <Button
             variant="contained"
             component={RouterLink}
-            to="/condition/new-condition"
+            to="/condition/new-condition-rule"
             startIcon={<Iconify icon="eva:plus-fill" />}
           >
             New Condition

@@ -27,6 +27,11 @@ const navConfig = [
     icon: getIcon('fa6-solid:ranking-star'),
   },
   {
+    title: 'program',
+    path: '/dashboard/program',
+    icon: getIcon('mdi:format-list-bulleted-square'),
+  },
+  {
     title: 'condition',
     path: '/dashboard/condition',
     icon: getIcon('mdi:clipboard-text'),

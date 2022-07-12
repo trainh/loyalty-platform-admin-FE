@@ -1,5 +1,5 @@
 import { filter } from 'lodash';
-import { sentenceCase } from 'change-case';
+// import { sentenceCase } from 'change-case';
 import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // material
@@ -19,7 +19,7 @@ import {
 } from '@mui/material';
 // components
 import Page from '../../components/Page';
-import Label from '../../components/Label';
+// import Label from '../components/Label';
 import Scrollbar from '../../components/Scrollbar';
 import Iconify from '../../components/Iconify';
 import SearchNotFound from '../../components/SearchNotFound';
@@ -32,10 +32,8 @@ import USERLIST from '../../_mock/user';
 const TABLE_HEAD = [
   { id: 'no', label: 'No', alignRight: false },
   { id: 'name', label: 'Name', alignRight: false },
-  { id: 'actionName', label: 'Action Name', alignRight: false },
-  { id: 'total', label: 'Total', alignRight: false },
-  { id: 'repemded', label: 'Repemded', alignRight: false },
-  { id: 'used', label: 'Used', alignRight: false },
+  { id: 'description', label: 'Description', alignRight: false },
+  { id: 'updateDate', label: 'Update Date', alignRight: false },
   { id: '' },
 ];
 
@@ -133,19 +131,19 @@ export default function User() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="Voucher">
+    <Page title="Program">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Voucher
+            Program
           </Typography>
           <Button
             variant="contained"
             component={RouterLink}
-            to="/voucher/new-voucher"
+            to="/program/new-program"
             startIcon={<Iconify icon="eva:plus-fill" />}
           >
-            New Voucher
+            New Program
           </Button>
         </Stack>
 
@@ -166,11 +164,19 @@ export default function User() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, actionName, total, repemded, avatarUrl, used } = row;
+                    const { id, name, description, updateDate, avatarUrl } = row;
                     // const isItemSelected = selected.indexOf(name) !== -1;
+                    // Bỏ trong return -> <TableRow>
+                    // role="checkbox"
+                    // selected={isItemSelected}
+                    // aria-checked={isItemSelected}
 
+                    // Bỏ trong return -> <TableRow>
+                    // <TableCell padding="checkbox">
+                    //   <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
+                    // </TableCell>;
                     return (
-                      <TableRow hover key={id}>
+                      <TableRow hover key={id} tabIndex={-1}>
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
                             <Avatar alt={name} src={avatarUrl} />
@@ -179,15 +185,8 @@ export default function User() {
                             </Typography>
                           </Stack>
                         </TableCell>
-                        <TableCell align="left">{actionName}</TableCell>
-                        <TableCell align="left">{total}</TableCell>
-                        <TableCell align="left">{repemded}</TableCell>
-                        <TableCell align="left">
-                          <Label variant="ghost" color={(used === 'banned' && 'error') || 'success'}>
-                            {sentenceCase(used)}
-                          </Label>
-                        </TableCell>
-
+                        <TableCell align="left">{description}</TableCell>
+                        <TableCell align="left">{updateDate}</TableCell>
                         <TableCell align="right">
                           <UserMoreMenu />
                         </TableCell>
