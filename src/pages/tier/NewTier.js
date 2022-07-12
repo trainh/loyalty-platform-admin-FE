@@ -2,6 +2,6 @@ import Page from '../../components/Page';
 
 // ----------------------------------------------------------------------
 
-export default function NewGift() {
-  return <Page title="New Gift">'Gift'</Page>;
+export default function NewTier() {
+  return <Page title="New Tier">'Rule'</Page>;
 }

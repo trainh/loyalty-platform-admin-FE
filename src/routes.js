@@ -7,11 +7,14 @@ import Membership from './pages/Membership';
 import Rule from './pages/rule/Rule';
 import NewRule from './pages/rule/NewRule';
 import Voucher from './pages/voucher/Voucher';
+import Tier from './pages/tier/Tier';
+import NewTier from './pages/tier/NewTier';
 import NewVoucher from './pages/voucher/NewVoucher';
 import Condition from './pages/condition/Condition';
+import Action from './pages/action/Action';
 import NewCondition from './pages/condition/NewCondition';
-import Gift from './pages/gift/Gift';
-import NewGift from './pages/gift/NewGift';
+import Reward from './pages/reward/Reward';
+import NewReward from './pages/reward/NewReward';
 import Login from './pages/Login';
 import NotFound from './pages/Page404';
 import Register from './pages/Register';
@@ -30,8 +33,15 @@ export default function Router() {
         { path: 'condition', element: <Condition /> },
         { path: 'rule', element: <Rule /> },
         { path: 'voucher', element: <Voucher /> },
-        { path: 'gift', element: <Gift /> },
+        { path: 'reward', element: <Reward /> },
+        { path: 'tier', element: <Tier /> },
+        { path: 'action', element: <Action /> },
       ],
+    },
+    {
+      path: '/action',
+      element: <DashboardLayout />,
+      children: [{ path: 'new-condition', element: <NewCondition /> }],
     },
     {
       path: '/condition',
@@ -49,9 +59,14 @@ export default function Router() {
       children: [{ path: 'new-voucher', element: <NewVoucher /> }],
     },
     {
-      path: '/gift',
+      path: '/reward',
       element: <DashboardLayout />,
-      children: [{ path: 'new-gift', element: <NewGift /> }],
+      children: [{ path: 'new-reward', element: <NewReward /> }],
+    },
+    {
+      path: '/tier',
+      element: <DashboardLayout />,
+      children: [{ path: 'new-tier', element: <NewTier /> }],
     },
     {
       path: '/',

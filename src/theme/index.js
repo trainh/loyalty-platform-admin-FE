@@ -19,10 +19,20 @@ export default function ThemeProvider({ children }) {
   const themeOptions = useMemo(
     () => ({
       palette,
+      maxWidth: 2000,
       shape: { borderRadius: 8 },
       typography,
       shadows,
       customShadows,
+      MuiContainer: {
+        styleOverride: {
+          root: {
+            '&.Custom': {
+              minWidth: 2000,
+            },
+          },
+        },
+      },
     }),
     []
   );

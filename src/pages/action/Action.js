@@ -6,6 +6,11 @@ import axios from 'axios';
 import { DataGrid } from '@mui/x-data-grid';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
+import PropTypes from 'prop-types';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import StarIcon from '@mui/icons-material/Star';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 
 // material
 import {
@@ -42,18 +47,26 @@ import USERLIST from '../../_mock/user';
 //   { id: '' },
 // ];
 
-const columns = [
+const columnsPoint = [
   { field: 'id', headerName: 'ID' },
   { field: 'loyaltyProgramId', headerName: 'Program', width: 120 },
-  { field: 'createdAt', headerName: 'Created', width: 120 },
-  { field: 'startDate', headerName: 'Start', width: 120 },
-  { field: 'endDate', headerName: 'End', width: 120 },
-  { field: 'maxPoints', headerName: 'Max Point', width: 100 },
-  { field: 'spendingValue', headerName: 'Value', width: 100 },
-  { field: 'minPointsForRedemption', headerName: 'Min For Redemp', width: 100 },
-  { field: 'minRedeemablePoints', headerName: 'Min Redeemable Points', width: 100 },
-  { field: 'minRedeemableAmount', headerName: 'Min Redemp Amount', width: 100 },
-  { field: 'isActive', headerName: 'Active', width: 100 },
+  { field: 'membershipId', headerName: 'Membership', width: 200 },
+  { field: 'referrerId', headerName: 'Referrer', width: 200 },
+  { field: 'points', headerName: 'Points', width: 120 },
+  { field: 'referrerPoints', headerName: 'Ref. Points', width: 120 },
+  { field: 'actionDate', headerName: 'Date', width: 200 },
+  { field: 'status', headerName: 'Status', width: 100 },
+  { field: 'description', headerName: 'Description', width: 300 },
+];
+
+const columnsReward = [
+  { field: 'id', headerName: 'ID' },
+  { field: 'loyaltyProgramId', headerName: 'Program', width: 120 },
+  { field: 'membershipId', headerName: 'Membership', width: 200 },
+  { field: 'referrerId', headerName: 'Referrer', width: 200 },
+  { field: 'membershipRewardId', headerName: 'Reward', width: 120 },
+  { field: 'referrerRewardId', headerName: 'Ref. Rewards', width: 120 },
+  { field: 'actionDate', headerName: 'Date', width: 200 },
   { field: 'status', headerName: 'Status', width: 100 },
   { field: 'description', headerName: 'Description', width: 300 },
 ];
@@ -100,7 +113,40 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-export default function User() {
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
+
+export default function Action() {
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
@@ -116,6 +162,8 @@ export default function User() {
   const [conditions, setConditions] = useState([]);
 
   const [error, setError] = useState('');
+
+  const [value, setValue] = useState(0);
 
   useEffect(() => {
     axios
@@ -196,8 +244,12 @@ export default function User() {
   //   setSelected(newSelected);
   // };
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+  //   const handleChangePage = (event, newPage) => {
+  //     setPage(newPage);
+  //   };
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
   };
 
   const handleChangeRowsPerPage = (event) => {
@@ -236,19 +288,41 @@ export default function User() {
           <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
           <Scrollbar>
-            <div style={{ height: 900, width: '100%', padding: 30 }}>
-              <DataGrid
-                rows={filteredConditions}
-                columns={columns}
-                pageSize={12}
-                components={{
-                  NoRowsOverlay: CustomNoRowsOverlay,
-                }}
-              />
-            </div>
+            <Box sx={{ width: '100%' }}>
+              <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" variant="fullWidth">
+                  <Tab icon={<StarIcon />} iconPosition="bottom" label="POINT" {...a11yProps(0)} />
+                  <Tab icon={<EmojiEventsIcon />} iconPosition="bottom" label="REWARD" {...a11yProps(1)} />
+                </Tabs>
+              </Box>
+              <TabPanel value={value} index={0}>
+                <div style={{ height: 900, width: '100%', padding: 30 }}>
+                  <DataGrid
+                    rows={filteredConditions}
+                    columns={columnsPoint}
+                    pageSize={12}
+                    components={{
+                      NoRowsOverlay: CustomNoRowsOverlay,
+                    }}
+                  />
+                </div>
+              </TabPanel>
+              <TabPanel value={value} index={1}>
+                <div style={{ height: 900, width: '100%', padding: 30 }}>
+                  <DataGrid
+                    rows={filteredConditions}
+                    columns={columnsReward}
+                    pageSize={12}
+                    components={{
+                      NoRowsOverlay: CustomNoRowsOverlay,
+                    }}
+                  />
+                </div>
+              </TabPanel>
+            </Box>
           </Scrollbar>
 
-          <TablePagination
+          {/* <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
             count={USERLIST.length}
@@ -256,7 +330,7 @@ export default function User() {
             page={page}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
-          />
+          /> */}
         </Card>
       </Container>
     </Page>
