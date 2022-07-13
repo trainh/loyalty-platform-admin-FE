@@ -48,7 +48,7 @@ export default function NewRule() {
 
   const itemEnd = (value) => {
     let result = null;
-
+//
     switch (value) {
       case 0:
         result = (
