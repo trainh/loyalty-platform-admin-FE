@@ -1,184 +1,53 @@
 import React, { useState } from 'react';
+import { InboxOutlined } from '@ant-design/icons';
+import type { UploadProps as Uploaded } from 'antd';
+import { message, Upload } from 'antd';
+import {
+  Container,
+  Button,
+  TextField,
+  Typography,
+  Stack,
+  Autocomplete,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+} from '@mui/material';
 
-import { Container, Button, TextField, Typography, Stack, Autocomplete } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { Container as BsContainer, Row as BsRow, Col as BsCol } from 'react-bootstrap';
-import ClearIcon from '@mui/icons-material/Clear';
+import { DesktopDateTimePicker } from '@mui/x-date-pickers/DesktopDateTimePicker';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import Iconify from '../../components/Iconify';
 import Page from '../../components/Page';
 
 // ----------------------------------------------------------------------
 
 export default function NewVoucher() {
-  // const [valueDate, setValue] = useState(new Date('2018-01-01T00:00:00.000Z'));
-  const options = ['Active', 'Non-Active'];
+  const [valueDate, setValue] = useState(new Date('2018-01-01T00:00:00.000Z'));
+  const expireOptions = ['Day', 'Month', 'Year'];
+  const { Dragger } = Upload;
 
-  const [isDragging, setIsDragging] = useState(false);
-  const [readyToDrop, setReadyToDrop] = useState(false);
-  const [optionsEnd, setOptionsEnd] = useState([]);
-  const isUnitItem = false;
-  const containerHeight = 400;
-
-  const [optionsGroup, setOptionsGroup] = useState([
-    { value: 0, label: 'Voucher Sub-menu 1', isExpand: false },
-    { value: 1, label: 'Voucher Sub-menu 2', isExpand: false },
-    { value: 2, label: 'Voucher Sub-menu 3', isExpand: false },
-  ]);
-
-  const optionsStart = [
-    { value: 0, label: 'Item Voucher 1', group: 0 },
-    { value: 1, label: 'Item Voucher 2', group: 0 },
-    { value: 2, label: 'Item Voucher 3', group: 1 },
-  ];
-
-  const itemEnd = (value) => {
-    let result = null;
-
-    switch (value) {
-      case 0:
-        result = (
-          <span className="d-flex align-items-center">
-            <span style={{ color: 'black', fontSize: 14, marginBottom: 1 }} className="mr-1">
-              Label Voucher:
-            </span>
-            <span style={{ color: '#1266F1', fontSize: 14 }} className="m-1">
-              Voucher Point:
-            </span>
-            <TextField style={{ width: 100 }} size="small" id="outlined-number" label="Point" type="number" required />
-            <span style={{ color: '#1266F1', fontSize: 14 }} className="m-1">
-              Voucher String:
-            </span>
-            <TextField style={{ width: 100 }} size="small" id="outlined-number" label="String" type="text" required />
-          </span>
-        );
-        break;
-
-      case 1:
-        result = (
-          <div div className="d-flex align-items-center">
-            <span style={{ color: 'black', fontSize: 14, marginBottom: 1 }}>Voucher Rule </span>
-            {/* <Button onClick={() => handleClickOpen(index)}>selection list ({item.selectList.length})</Button>
-            <span style={{ color: 'black', fontSize: 14 }}> has quantity </span> */}
-            <Autocomplete
-              // value={valueable}
-              // onChange={(event, valueable) => {
-              //   setValue(valueable);
-              // }}
-              size="small"
-              className="mx-1"
-              options={options}
-              renderInput={(params) => <TextField style={{ width: 162 }} {...params} variant="outlined" required />}
-            />
-            <TextField
-              style={{ width: 100 }}
-              className="mx-1"
-              size="small"
-              id="outlined-number"
-              label="Point"
-              type="number"
-              required
-            />
-          </div>
-        );
-        break;
-
-      case 2:
-        result = (
-          <span className="d-flex align-items-center">
-            <span style={{ color: 'black', fontSize: 14, marginBottom: 1 }} className="mr-1">
-              Voucher Label dnd:
-            </span>
-            <span style={{ color: '#1266F1', fontSize: 14 }} className="m-1">
-              Voucher Point:
-            </span>
-            <TextField style={{ width: 100 }} size="small" id="outlined-number" label="Point" type="text" required />
-          </span>
-        );
-        break;
-
-      default:
-        break;
-    }
-    return result;
+  const props: Uploaded = {
+    name: 'file',
+    multiple: true,
+    action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+    onChange(info) {
+      const { status } = info.file;
+      if (status !== 'uploading') {
+        console.log(info.file, info.fileList);
+      }
+      if (status === 'done') {
+        // message.success(`${info.file.name} file uploaded successfully.`);
+      } else if (status === 'error') {
+        // message.error(`${info.file.name} file upload failed.`);
+      }
+    },
+    onDrop(e) {
+      console.log('Dropped files', e.dataTransfer.files);
+    },
   };
-
-  const renderListStart = () => {
-    let renderingGroup = null;
-
-    return optionsStart.map((v) => {
-      const groupObj = optionsGroup.find((og) => og.value === v.group);
-      const groupValue = groupObj && groupObj.value;
-
-      const group = (
-        <div>
-          <Button
-            style={{ cursor: 'pointer', fontSize: 17 }}
-            onClick={() => {
-              if (groupObj) {
-                const newOptionsGroup = optionsGroup.map((og) =>
-                  og.value === groupValue ? { ...og, isExpand: !og.isExpand } : og
-                );
-
-                setOptionsGroup(newOptionsGroup);
-              }
-            }}
-          >
-            {groupObj && groupObj.label}
-          </Button>
-        </div>
-      );
-
-      const item = (
-        <div
-          style={{ cursor: 'pointer', userSelect: 'none', borderRadius: 10, width: 250 }}
-          className="border p-2 mb-2"
-          draggable
-          onDragStart={() => setIsDragging(true)}
-          onDragEnd={() => {
-            if (readyToDrop) {
-              if (!isUnitItem || (isUnitItem && !optionsEnd.find((oe) => oe.value === v.value))) {
-                setOptionsEnd([...optionsEnd, v]);
-              }
-            }
-
-            setReadyToDrop(false);
-            setIsDragging(false);
-          }}
-        >
-          {v.label}
-        </div>
-      );
-
-      const result = (
-        <div key={v.label}>
-          {renderingGroup !== groupValue && group}
-          {groupObj.isExpand && item}
-        </div>
-      );
-
-      renderingGroup = groupObj && groupObj.value;
-
-      return result;
-    });
-  };
-
-  const renderListEnd = () =>
-    optionsEnd.map((v, i) => (
-      <div key={`${i}-${v.label}`} className="position-relative">
-        <div style={{ cursor: 'pointer', userSelect: 'none', width: 'calc(100% - 32px)' }} className="p-1 mb-1">
-          {itemEnd(v.value)}
-          {i < optionsEnd.length - 1 ? <div>Or</div> : null}
-        </div>
-        <ClearIcon
-          className="position-absolute"
-          style={{ top: 14, right: 0, cursor: 'pointer' }}
-          onClick={() => {
-            const result = optionsEnd.filter((_, opIndex) => opIndex !== i);
-            setOptionsEnd(result);
-          }}
-        />
-      </div>
-    ));
 
   return (
     <Page title="Condition Rule">
@@ -191,60 +60,157 @@ export default function NewVoucher() {
             Save
           </Button>
         </Stack>
-        <div>
-          <TextField
-            sx={{
-              mb: 2,
-              mr: 2,
-              width: { sm: 300 },
-            }}
-            id="outlined-basic"
-            label="Name"
-            variant="outlined"
-            required
-          />
-          <TextField
-            sx={{
-              mb: 2,
-              mr: 2,
-              width: { sm: 750 },
-            }}
-            inputProps={{
-              style: {
-                height: 100,
-              },
-            }}
-            id="outlined-basic"
-            label="Description"
-            variant="outlined"
-            required
-            multiline
-          />
-        </div>
-      </Container>
-      <BsContainer fluid style={{ height: 400, marginTop: 15 }}>
-        <BsRow>
-          <BsCol sm={3} style={{ height: containerHeight, overflow: 'auto' }}>
-            <div className="p-2 border">
-              <span style={{ color: 'black', fontSize: 25, fontWeight: 'bold' }}>Voucher Menu</span>
-              <div>{renderListStart()}</div>
-            </div>
-          </BsCol>
-          <BsCol
-            className={`position-relative border${readyToDrop ? ' bg-white' : ''}`}
-            style={{ height: containerHeight, overflow: 'auto' }}
-          >
-            <div
-              className="position-absolute"
-              style={{ inset: 0, zIndex: isDragging ? 1 : 0 }}
-              onDragOver={(e) => e.preventDefault()}
-              onDragEnter={() => setReadyToDrop(true)}
-              onDragLeave={() => setReadyToDrop(false)}
+        <BsContainer fluid>
+          <BsRow>
+            <span className="d-flex align-items-center" style={{ marginBottom: 18 }}>
+              <span style={{ fontSize: 18 }} className="m-2">
+                Voucher Code:
+              </span>
+              <TextField style={{ width: 500, marginRight: 10 }} size="small" label="Voucher Code" disabled />
+              <Button
+                style={{ width: 156 }}
+                variant="contained"
+                component={RouterLink}
+                to="#"
+                // startIcon={<Iconify icon="mdi:content-save" />}
+              >
+                Generate
+              </Button>
+            </span>
+          </BsRow>
+          <BsRow>
+            <TextField
+              style={{ width: 800, marginBottom: 18 }}
+              id="outlined-basic"
+              label="Name"
+              variant="outlined"
+              required
             />
-            {<div className="p-4">{renderListEnd()}</div>}
-          </BsCol>
-        </BsRow>
-      </BsContainer>
+          </BsRow>
+          <BsRow style={{ marginBottom: 18 }}>
+            <BsCol sm={2.5}>
+              <TextField
+                style={{ width: 394 }}
+                id="outlined-basic"
+                label="Discount Value "
+                variant="outlined"
+                type="number"
+                required
+              />
+            </BsCol>
+            <BsCol>
+              <TextField
+                style={{ width: 394 }}
+                id="outlined-basic"
+                label="Point"
+                variant="outlined"
+                type="number"
+                required
+              />
+            </BsCol>
+          </BsRow>
+          <BsRow style={{ marginBottom: 18 }}>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <BsCol sm={2.5}>
+                <DesktopDateTimePicker
+                  label="Voucher Effective Date"
+                  value={valueDate}
+                  minDate={new Date('2017-01-01')}
+                  onChange={(newValue) => {
+                    setValue(newValue);
+                  }}
+                  renderInput={(params) => (
+                    <TextField style={{ width: 394 }} disabled id="outlined-disabled" {...params} required />
+                  )}
+                />
+              </BsCol>
+              <BsCol>
+                <DesktopDateTimePicker
+                  label="Voucher Expiration Date"
+                  value={valueDate}
+                  minDate={new Date('2017-01-01')}
+                  onChange={(newValue) => {
+                    setValue(newValue);
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      sx={{
+                        mb: 1,
+                        width: { sm: 394 },
+                      }}
+                      {...params}
+                      required
+                    />
+                  )}
+                />
+              </BsCol>
+            </LocalizationProvider>
+          </BsRow>
+          <BsRow>
+            <span className="d-flex align-items-center" style={{ marginBottom: 18 }}>
+              <span style={{ fontSize: 18 }} className="m-2">
+                Expiration Period:
+              </span>
+              <TextField style={{ width: 220, marginRight: 8 }} size="large" label="Amount" type="number" required />
+              <span style={{ fontSize: 18 }} className="m-2">
+                Expiration Period Unit:
+              </span>
+              <Autocomplete
+                size="large"
+                className="mx-1"
+                options={expireOptions}
+                renderInput={(params) => (
+                  <TextField
+                    style={{ width: 220 }}
+                    {...params}
+                    id="outlined-startAdornment"
+                    label="Time type"
+                    variant="outlined"
+                    required
+                  />
+                )}
+              />
+            </span>
+          </BsRow>
+          <BsRow style={{ marginBottom: 18 }}>
+            <span style={{ fontSize: 18 }}>
+              Partial Redeemable:
+              <span>
+                <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group">
+                  <FormControlLabel value="isActive" control={<Radio />} label="Yes" />
+                  <FormControlLabel value="isActive" control={<Radio />} label="No" />
+                </RadioGroup>
+              </span>
+            </span>
+          </BsRow>
+          <BsRow>
+            <span>
+              <span style={{ color: 'black', fontSize: 25, fontWeight: 'bold' }}>Voucher Images</span>
+              <Dragger {...props}>
+                <span className="ant-upload-drag-icon" style={{ height: 200, width: 200 }}>
+                  <InboxOutlined />
+                </span>
+                <p className="ant-upload-text">Click or drag file to this area to upload</p>
+              </Dragger>
+            </span>
+          </BsRow>
+          <BsRow>
+            <TextField
+              style={{ width: 800 }}
+              inputProps={{
+                style: {
+                  height: 100,
+                },
+              }}
+              id="outlined-basic"
+              label="Description"
+              variant="outlined"
+              required
+              multiline
+            />
+          </BsRow>
+        </BsContainer>
+      </Container>
     </Page>
   );
 }
