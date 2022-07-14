@@ -22,6 +22,7 @@ export default function NewVoucher() {
   const [optionsGroup, setOptionsGroup] = useState([
     { value: 0, label: 'Voucher Sub-menu 1', isExpand: false },
     { value: 1, label: 'Voucher Sub-menu 2', isExpand: false },
+    { value: 2, label: 'Voucher Sub-menu 3', isExpand: false },
   ]);
 
   const optionsStart = [
