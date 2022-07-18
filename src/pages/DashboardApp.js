@@ -17,6 +17,7 @@ export default function DashboardApp() {
 
   useEffect(() => {
     const authToken = localStorage.getItem('token');
+    
 
     if (!authToken) {
         navigate('/login')
