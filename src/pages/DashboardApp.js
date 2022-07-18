@@ -1,6 +1,4 @@
-// @mui
-import React, {useEffect} from 'react';
-import { useNavigate } from 'react-router-dom';
+// @m
 // import { useTheme } from '@mui/material/styles';
 import { Grid, Container, Typography } from '@mui/material';
 
@@ -13,16 +11,7 @@ import { AppWidgetSummary } from '../sections/@dashboard/app';
 
 export default function DashboardApp() {
   // const theme = useTheme();
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    const authToken = localStorage.getItem('token');
-    
-
-    if (!authToken) {
-        navigate('/login')
-    }
-}, [])
 
   const token = localStorage.getItem('token');
   console.log(token);
