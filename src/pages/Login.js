@@ -60,6 +60,8 @@ export default function Login() {
 
   const mdUp = useResponsive('up', 'md');
 
+  console.log(localStorage.getItem('token'));
+
   return (
     <Page title="Login">
       <RootStyle>

@@ -4,23 +4,23 @@ import DashboardLayout from './layouts/dashboard';
 import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 //
 import Membership from './pages/Membership';
-import Rule from './pages/rule/Rule';
+import Rule from './pages/condition/condition-rule/Rule';
 import NewProgram from './pages/program/NewProgram';
-import NewRule from './pages/rule/NewRule';
+import NewRule from './pages/condition/condition-rule/NewRule';
 import Voucher from './pages/voucher/Voucher';
 import Tier from './pages/tier/Tier';
 import Program from './pages/program/Program';
 import NewVoucher from './pages/voucher/NewVoucher';
 import Condition from './pages/condition/Condition';
-import NewConditionGroup from './pages/condition/NewConditionGroup';
-import NewConditionRule from './pages/condition/NewConditionRule';
+import NewConditionGroup from './pages/condition/condition-group/NewConditionGroup';
 import Reward from './pages/reward/Reward';
 import NewReward from './pages/reward/NewReward';
 import Login from './pages/Login';
 import NotFound from './pages/Page404';
 import Register from './pages/Register';
 import DashboardApp from './pages/DashboardApp';
-import NewCondition from './pages/NewCondition';
+import NewCondition from './pages/condition/NewCondition';
+import ConditionGroups from './pages/condition/condition-group/condition-groups';
 
 // ----------------------------------------------------------------------
 
@@ -36,7 +36,7 @@ export default function Router() {
         { path: 'program', element: <Program /> },
         { path: 'condition', element: <Condition /> },
         { path: 'rule', element: <Rule /> },
-        { path: 'new-condition', element: <NewCondition /> },
+
         { path: 'voucher', element: <Voucher /> },
         { path: 'reward', element: <Reward /> },
       ],
@@ -51,7 +51,10 @@ export default function Router() {
       element: <DashboardLayout />,
       children: [
         { path: 'new-condition-group', element: <NewConditionGroup /> },
-        { path: 'new-condition-rule', element: <NewConditionRule /> },
+        { path: 'new-condition-rule', element: <NewRule /> },
+        { path: 'new-condition', element: <NewCondition /> },
+        { path: 'condition-groups', element: <ConditionGroups /> },
+        {path: 'conditions', element: <Condition/>}
       ],
     },
     {

@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { InboxOutlined } from '@ant-design/icons';
-import type { UploadProps as Uploaded } from 'antd';
+// import type { UploadProps as Uploaded } from 'antd';
 import { message, Upload } from 'antd';
+import { useDropzone } from 'react-dropzone';
 import {
   Container,
   Button,
@@ -12,8 +13,11 @@ import {
   Radio,
   RadioGroup,
   FormControlLabel,
+  Grid,
+  FormControl,
+  FormLabel,
 } from '@mui/material';
-
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { Link as RouterLink } from 'react-router-dom';
 import { Container as BsContainer, Row as BsRow, Col as BsCol } from 'react-bootstrap';
 import { DesktopDateTimePicker } from '@mui/x-date-pickers/DesktopDateTimePicker';
@@ -29,25 +33,30 @@ export default function NewVoucher() {
   const expireOptions = ['Day', 'Month', 'Year'];
   const { Dragger } = Upload;
 
-  const props: Uploaded = {
-    name: 'file',
-    multiple: true,
-    action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-    onChange(info) {
-      const { status } = info.file;
-      if (status !== 'uploading') {
-        console.log(info.file, info.fileList);
-      }
-      if (status === 'done') {
-        // message.success(`${info.file.name} file uploaded successfully.`);
-      } else if (status === 'error') {
-        // message.error(`${info.file.name} file upload failed.`);
-      }
-    },
-    onDrop(e) {
-      console.log('Dropped files', e.dataTransfer.files);
-    },
-  };
+  //   const props: Uploaded = {
+  //     name: 'file',
+  //     multiple: true,
+  //     action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+  //     onChange(info) {
+  //       const { status } = info.file;
+  //       if (status !== 'uploading') {
+  //         console.log(info.file, info.fileList);
+  //       }
+  //       if (status === 'done') {
+  //         // message.success(`${info.file.name} file uploaded successfully.`);
+  //       } else if (status === 'error') {
+  //         // message.error(`${info.file.name} file upload failed.`);
+  //       }
+  //     },
+  //     onDrop(e) {
+  //       console.log('Dropped files', e.dataTransfer.files);
+  //     },
+  //   };
+
+  const onDrop = useCallback((acceptedFiles) => {
+    // Do something with the files
+  }, []);
+  const drop = useDropzone({ onDrop });
 
   return (
     <Page title="Condition Rule">
@@ -63,7 +72,7 @@ export default function NewVoucher() {
         <BsContainer fluid>
           <BsRow>
             <span className="d-flex align-items-center" style={{ marginBottom: 18 }}>
-              <span style={{ fontSize: 18 }} className="m-2">
+              <span style={{ fontSize: 18, fontWeight: 'bold' }} className="m-2">
                 Voucher Code:
               </span>
               <TextField style={{ width: 500, marginRight: 10 }} size="small" label="Voucher Code" disabled />
@@ -148,12 +157,12 @@ export default function NewVoucher() {
           </BsRow>
           <BsRow>
             <span className="d-flex align-items-center" style={{ marginBottom: 18 }}>
-              <span style={{ fontSize: 18 }} className="m-2">
-                Expiration Period:
+              <span style={{ fontSize: 18, fontWeight: 'bold' }} className="m-2">
+                Exp. Period:
               </span>
-              <TextField style={{ width: 220, marginRight: 8 }} size="large" label="Amount" type="number" required />
-              <span style={{ fontSize: 18 }} className="m-2">
-                Expiration Period Unit:
+              <TextField style={{ width: 273, marginRight: 8 }} size="large" label="Amount" type="number" required />
+              <span style={{ fontSize: 18, fontWeight: 'bold' }} className="m-2">
+                Exp. Period Unit:
               </span>
               <Autocomplete
                 size="large"
@@ -161,7 +170,7 @@ export default function NewVoucher() {
                 options={expireOptions}
                 renderInput={(params) => (
                   <TextField
-                    style={{ width: 220 }}
+                    style={{ width: 233 }}
                     {...params}
                     id="outlined-startAdornment"
                     label="Time type"
@@ -174,24 +183,49 @@ export default function NewVoucher() {
           </BsRow>
           <BsRow style={{ marginBottom: 18 }}>
             <span style={{ fontSize: 18 }}>
-              Partial Redeemable:
-              <span>
+              <FormControl>
+                <FormLabel id="demo-row-radio-buttons-group-label">
+                  <span style={{ color: 'black', fontSize: 18, fontWeight: 'bold' }}>Partial Redeeme</span>
+                </FormLabel>
                 <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group">
-                  <FormControlLabel value="isActive" control={<Radio />} label="Yes" />
-                  <FormControlLabel value="isActive" control={<Radio />} label="No" />
+                  <FormControlLabel value="female" control={<Radio />} label="Yes" />
+                  <FormControlLabel value="male" control={<Radio />} label="No" />
                 </RadioGroup>
-              </span>
+              </FormControl>
             </span>
           </BsRow>
           <BsRow>
-            <span>
+            <span style={{ width: '54%' }}>
               <span style={{ color: 'black', fontSize: 25, fontWeight: 'bold' }}>Voucher Images</span>
-              <Dragger {...props}>
-                <span className="ant-upload-drag-icon" style={{ height: 200, width: 200 }}>
-                  <InboxOutlined />
-                </span>
-                <p className="ant-upload-text">Click or drag file to this area to upload</p>
-              </Dragger>
+              <Grid container direction="column">
+                <Grid
+                  container
+                  direction="column"
+                  justifyContent="center"
+                  alignContent="center"
+                  sx={{ border: '1px solid grey', height: 200, bgcolor: 'grey', mb: 3, width: '100%' }}
+                >
+                  <Grid item>
+                    <div {...drop.getRootProps()}>
+                      <Grid item>
+                        <Grid container direction="row">
+                          <Grid item>
+                            <CloudUploadIcon sx={{ fontSize: 30, mr: 2, color: 'grey' }} />
+                          </Grid>
+                          <Grid item>
+                            <input {...drop.getInputProps()} />
+                            {drop.isDragActive ? (
+                              <p>Drop the files here ...</p>
+                            ) : (
+                              <Typography sx={{ fontSize: 20, color: 'GreyText' }}>Drop your images here</Typography>
+                            )}
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                    </div>
+                  </Grid>
+                </Grid>
+              </Grid>
             </span>
           </BsRow>
           <BsRow>

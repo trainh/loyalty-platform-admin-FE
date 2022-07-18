@@ -7,7 +7,6 @@ import { DataGrid } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 import { render } from 'react-dom';
-import PropTypes from 'prop-types';
 import 'ag-grid-enterprise';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
@@ -27,19 +26,16 @@ import {
   Typography,
   TableContainer,
   TablePagination,
-  Tabs,
-  Tab,
 } from '@mui/material';
 // components
 // import useVoucher from 'src/services/useVoucher';
-import Page from '../../components/Page';
-import Label from '../../components/Label';
-import Scrollbar from '../../components/Scrollbar';
-import Iconify from '../../components/Iconify';
-import SearchNotFound from '../../components/SearchNotFound';
-import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/@dashboard/user';
+import Page from '../../../components/Page';
+import Label from '../../../components/Label';
+import Scrollbar from '../../../components/Scrollbar';
+import Iconify from '../../../components/Iconify';
+import SearchNotFound from '../../../components/SearchNotFound';
+import { UserListHead, UserListToolbar, UserMoreMenu } from '../../../sections/@dashboard/user';
 // mock
-import USERLIST from '../../_mock/user';
 
 // ----------------------------------------------------------------------
 
@@ -69,39 +65,6 @@ import USERLIST from '../../_mock/user';
 //   { field: 'status', headerName: 'Status', width: 100 },
 //   { field: 'description', headerName: 'Description', width: 200 },
 // ];
-
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
-
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
-}
 
 const filterParams = {
   comparator: (filterLocalDateAtMidnight, cellValue) => {
@@ -178,14 +141,14 @@ function getComparator(order, orderBy) {
 //   return stabilizedThis.map((el) => el[0]);
 // }
 
-export default function User() {
+export default function ConditionGroups() {
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
 
   const [selected, setSelected] = useState([]);
 
-  const [orderBy, setOrderBy] = useState('conditionGroupId');
+  const [orderBy, setOrderBy] = useState('name');
 
   const [filterName, setFilterName] = useState('');
 
@@ -196,18 +159,6 @@ export default function User() {
   const [vouchers, setVoucher] = useState([]);
 
   const [error, setError] = useState(null);
-
-  const [value, setValue] = useState(0);
-
-  const [pageSize, setPageSize] = useState(10);
-
-  const [pageNumber, setPageNumber] = useState(1);
-
-  const [filterString, setFilterString] = useState('');
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
 
   const defaultColDef = useMemo(() => {
     return {
@@ -220,7 +171,6 @@ export default function User() {
   const containerStyle = useMemo(() => ({ width: '100%', height: '100%' }), []);
   const gridStyle = useMemo(() => ({ height: '100%', width: '100%' }), []);
   const [rowData, setRowData] = useState([]);
-  const [rowData2, setRowData2] = useState([]);
   //   const columns = [
   //     { field: 'id', headerName: 'ID' },
   //     { field: 'name', headerName: 'Name', width: 140 },
@@ -233,26 +183,19 @@ export default function User() {
   //     { field: 'status', headerName: 'Status', width: 100 },
   //     { field: 'description', headerName: 'Description', width: 200 },
   //   ];
-  const [columnDefsItemCondition, setColumnDefsItemCondition] = useState([
-    { field: 'conditionGroupId' },
-    { field: 'quantity', filter: 'agNumberColumnFilter', maxWidth: 100 },
-    { field: 'nextQuantity', filter: 'agNumberColumnFilter', maxWidth: 100 },
-    { field: 'tierSequenceNumber', filter: 'agNumberColumnFilter', maxWidth: 100 },
-    { field: 'quantityGainPoint', filter: 'agNumberColumnFilter', maxWidth: 100 },
-    { field: 'productId', filter: 'agNumberColumnFilter', maxWidth: 100 },
-    { field: 'status' },
-    { field: 'description' },
-  ]);
-
-  const [columnDefsAmountCondition, setColumnDefsAmountCondition] = useState([
-    { field: 'conditionGroupId' },
-    { field: 'minOrderAmount', filter: 'agNumberColumnFilter', maxWidth: 100 },
-    { field: 'nextOrderTotalAmount', filter: 'agNumberColumnFilter', maxWidth: 100 },
-    { field: 'orderTotalAmountGainPoint', filter: 'agNumberColumnFilter', maxWidth: 100 },
-    { field: 'orderTotalAmountAfterDiscount', filter: 'agNumberColumnFilter', maxWidth: 100 },
-    { field: 'nextOrderTotalAmountAfterDiscont', filter: 'agNumberColumnFilter', maxWidth: 100 },
-    { field: 'orderTotalAmountAfterDiscountGainPoint', filter: 'agNumberColumnFilter', maxWidth: 100 },
-    { field: 'tierSequenceNumber', filter: 'agNumberColumnFilter', maxWidth: 100 },
+  const [columnDefs, setColumnDefs] = useState([
+    { field: 'name' },
+    { field: 'conditionRuleId' },
+    {
+      field: 'createdDate',
+      filter: 'agDateColumnFilter',
+      filterParams,
+    },
+    {
+      field: 'updateDate',
+      filter: 'agDateColumnFilter',
+      filterParams,
+    },
     { field: 'status' },
     { field: 'description' },
   ]);
@@ -277,26 +220,11 @@ export default function User() {
 
   console.log(localStorage.getItem('token'));
 
-  const onGridReadyAmountCondition = useCallback((params) => {
+  const onGridReady = useCallback((params) => {
     axios
-      .get(
-        `http://13.232.213.53/api/v1/order-amount-conditions?pageSize=${pageSize}&pageNumber=${pageNumber}&filterString=${filterString}&orderBy=${orderBy}`,
-        { headers }
-      )
-      .then((response) => {
-        setRowData2(response.data);
+      .get('http://13.232.213.53/api/v1/condition-groups?pageSize=13&pageNumber=1&filterString=a&orderBy=name', {
+        headers,
       })
-      .catch((error) => {
-        setError(error);
-      });
-  }, []);
-
-  const onGridReadyItemCondition = useCallback((params) => {
-    axios
-      .get(
-        `http://13.232.213.53/api/v1/order-item-conditions?pageSize=${pageSize}&pageNumber=${pageNumber}&filterString=${filterString}&orderBy=${orderBy}`,
-        { headers }
-      )
       .then((response) => {
         setRowData(response.data);
       })
@@ -332,15 +260,6 @@ export default function User() {
     return vouchers;
   }
 
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelecteds = USERLIST.map((n) => n.name);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
-  };
-
   // const handleClick = (event, name) => {
   //   const selectedIndex = selected.indexOf(name);
   //   let newSelected = [];
@@ -368,8 +287,6 @@ export default function User() {
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
   };
-
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
 
   //   const filteredUsers = applySortFilter(USERLIST, filterName);
 
@@ -412,62 +329,34 @@ export default function User() {
   }
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <div style={containerStyle}>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
         <Typography variant="h4" gutterBottom>
-          Conditions
+          Condition Groups
         </Typography>
         <Button
           variant="contained"
           component={RouterLink}
-          to="/condition/new-condition"
+          to="/condition/new-condition-group"
           startIcon={<Iconify icon="eva:plus-fill" />}
         >
-          New Condition
+          New Condition Group
         </Button>
       </Stack>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          <Tab label="Order Amount" {...a11yProps(0)} />
-          <Tab label="Order Item" {...a11yProps(1)} />
-        </Tabs>
-      </Box>
-      <TabPanel value={value} index={0}>
-        <div style={containerStyle}>
-          <UserListToolbar filterName={filterName} onFilterName={handleFilterByName} searchName={'Search voucher...'} />
-          <div style={gridStyle} className="ag-theme-alpine">
-            <AgGridReact
-              rowData={rowData2}
-              columnDefs={columnDefsAmountCondition}
-              defaultColDef={defaultColDef}
-              //   rowModelType={'serverSide'}
-              pagination
-              paginationPageSize={paginationPageSize}
-              cacheBlockSize={10}
-              animateRows
-              onGridReady={onGridReadyAmountCondition}
-            />
-          </div>
-        </div>
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        <div style={containerStyle}>
-          <UserListToolbar filterName={filterName} onFilterName={handleFilterByName} searchName={'Search voucher...'} />
-          <div style={gridStyle} className="ag-theme-alpine">
-            <AgGridReact
-              rowData={rowData}
-              columnDefs={columnDefsItemCondition}
-              defaultColDef={defaultColDef}
-              //   rowModelType={'serverSide'}
-              pagination
-              paginationPageSize={paginationPageSize}
-              cacheBlockSize={10}
-              animateRows
-              onGridReady={onGridReadyItemCondition}
-            />
-          </div>
-        </div>
-      </TabPanel>
-    </Box>
+      <UserListToolbar filterName={filterName} onFilterName={handleFilterByName} searchName={'Search voucher...'} />
+      <div style={gridStyle} className="ag-theme-alpine">
+        <AgGridReact
+          rowData={rowData}
+          columnDefs={columnDefs}
+          defaultColDef={defaultColDef}
+          //   rowModelType={'serverSide'}
+          pagination
+          paginationPageSize={paginationPageSize}
+          cacheBlockSize={10}
+          animateRows
+          onGridReady={onGridReady}
+        />
+      </div>
+    </div>
   );
 }

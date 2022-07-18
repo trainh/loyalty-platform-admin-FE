@@ -11,6 +11,9 @@ import { AppWidgetSummary } from '../sections/@dashboard/app';
 export default function DashboardApp() {
   // const theme = useTheme();
 
+  const token = localStorage.getItem('token');
+  console.log(token);
+
   return (
     <Page title="Dashboard">
       <Container maxWidth="xl">
