@@ -561,7 +561,7 @@ export default function NewCondition() {
             </BsCol>
             <BsCol>
               <TextField
-                style={{ width: 800, marginBottom: 25 }}
+                style={{ width: 800, marginBottom: 25, mt: 10 }}
                 inputProps={{
                   style: {
                     height: 100,

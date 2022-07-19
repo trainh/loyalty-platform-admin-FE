@@ -30,6 +30,9 @@ import {
   Tabs,
   Tab,
 } from '@mui/material';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
 // components
 // import useVoucher from 'src/services/useVoucher';
 import Page from '../../components/Page';
@@ -40,68 +43,6 @@ import SearchNotFound from '../../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/@dashboard/user';
 // mock
 import USERLIST from '../../_mock/user';
-
-// ----------------------------------------------------------------------
-
-// const TABLE_HEAD = [
-//   { id: 'no', label: 'No', alignRight: false },
-//   { id: 'name', label: 'Name', alignRight: false },
-//   { id: 'code', label: 'Code', alignRight: false },
-//   { id: 'disValue', label: 'Dis. Value', alignRight: false },
-//   { id: 'effDate', label: 'Eff. Date', alignRight: false },
-//   { id: 'expDate', label: 'Exp. Date', alignRight: false },
-//   { id: 'expPeriod', label: 'Exp. Period', alignRight: false },
-//   { id: 'expUnit', label: 'Exp. Unit', alignRight: false },
-//   { id: 'redeemable', label: 'Redeemable', alignRight: false },
-//   { id: 'status', label: 'Status', alignRight: false },
-//   { id: 'description', label: 'Description', alignRight: false },
-// ];
-
-// const columns = [
-//   { field: 'id', headerName: 'ID' },
-//   { field: 'name', headerName: 'Name', width: 140 },
-//   { field: 'effectiveDate', headerName: 'Eff. Date', width: 120 },
-//   { field: 'expirationDate', headerName: 'Exp. Date', width: 120 },
-//   { field: 'voucherCode', headerName: 'Voucher code', width: 250 },
-//   { field: 'discountValue', headerName: 'Dis. Value', width: 100 },
-//   { field: 'expirationPeriod', headerName: 'Exp. Period', width: 100 },
-//   { field: 'expirationPeriodUnits', headerName: 'Exp. Unit', width: 100 },
-//   { field: 'status', headerName: 'Status', width: 100 },
-//   { field: 'description', headerName: 'Description', width: 200 },
-// ];
-
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
-
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
-}
 
 const filterParams = {
   comparator: (filterLocalDateAtMidnight, cellValue) => {
@@ -165,19 +106,6 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-// function applySortFilter(array, comparator, query) {
-//   const stabilizedThis = array.map((el, index) => [el, index]);
-//   stabilizedThis.sort((a, b) => {
-//     const order = comparator(a[0], b[0]);
-//     if (order !== 0) return order;
-//     return a[1] - b[1];
-//   });
-//   if (query) {
-//     return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
-//   }
-//   return stabilizedThis.map((el) => el[0]);
-// }
-
 export default function User() {
   const [page, setPage] = useState(0);
 
@@ -197,7 +125,7 @@ export default function User() {
 
   const [error, setError] = useState(null);
 
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState('1');
 
   const [pageSize, setPageSize] = useState(10);
 
@@ -221,40 +149,28 @@ export default function User() {
   const gridStyle = useMemo(() => ({ height: '100%', width: '100%' }), []);
   const [rowData, setRowData] = useState([]);
   const [rowData2, setRowData2] = useState([]);
-  //   const columns = [
-  //     { field: 'id', headerName: 'ID' },
-  //     { field: 'name', headerName: 'Name', width: 140 },
-  //     { field: 'effectiveDate', headerName: 'Eff. Date', width: 120 },
-  //     { field: 'expirationDate', headerName: 'Exp. Date', width: 120 },
-  //     { field: 'voucherCode', headerName: 'Voucher code', width: 250 },
-  //     { field: 'discountValue', headerName: 'Dis. Value', width: 100 },
-  //     { field: 'expirationPeriod', headerName: 'Exp. Period', width: 100 },
-  //     { field: 'expirationPeriodUnits', headerName: 'Exp. Unit', width: 100 },
-  //     { field: 'status', headerName: 'Status', width: 100 },
-  //     { field: 'description', headerName: 'Description', width: 200 },
-  //   ];
   const [columnDefsItemCondition, setColumnDefsItemCondition] = useState([
-    { field: 'conditionGroupId' },
-    { field: 'quantity', filter: 'agNumberColumnFilter', maxWidth: 100 },
-    { field: 'nextQuantity', filter: 'agNumberColumnFilter', maxWidth: 100 },
-    { field: 'tierSequenceNumber', filter: 'agNumberColumnFilter', maxWidth: 100 },
-    { field: 'quantityGainPoint', filter: 'agNumberColumnFilter', maxWidth: 100 },
-    { field: 'productId', filter: 'agNumberColumnFilter', maxWidth: 100 },
-    { field: 'status' },
-    { field: 'description' },
+    { field: 'conditionGroupId', maxWidth: 200 },
+    { field: 'quantity', filter: 'agNumberColumnFilter', maxWidth: 200 },
+    { field: 'nextQuantity', filter: 'agNumberColumnFilter', maxWidth: 200 },
+    { field: 'tierSequenceNumber', filter: 'agNumberColumnFilter', maxWidth: 200 },
+    { field: 'quantityGainPoint', filter: 'agNumberColumnFilter', maxWidth: 200 },
+    { field: 'productId', filter: 'agNumberColumnFilter', maxWidth: 200 },
+    { field: 'status', maxWidth: 100 },
+    { field: 'description', maxWidth: 200 },
   ]);
 
   const [columnDefsAmountCondition, setColumnDefsAmountCondition] = useState([
-    { field: 'conditionGroupId' },
-    { field: 'minOrderAmount', filter: 'agNumberColumnFilter', maxWidth: 100 },
-    { field: 'nextOrderTotalAmount', filter: 'agNumberColumnFilter', maxWidth: 100 },
-    { field: 'orderTotalAmountGainPoint', filter: 'agNumberColumnFilter', maxWidth: 100 },
-    { field: 'orderTotalAmountAfterDiscount', filter: 'agNumberColumnFilter', maxWidth: 100 },
-    { field: 'nextOrderTotalAmountAfterDiscont', filter: 'agNumberColumnFilter', maxWidth: 100 },
-    { field: 'orderTotalAmountAfterDiscountGainPoint', filter: 'agNumberColumnFilter', maxWidth: 100 },
-    { field: 'tierSequenceNumber', filter: 'agNumberColumnFilter', maxWidth: 100 },
-    { field: 'status' },
-    { field: 'description' },
+    { field: 'conditionGroupId', maxWidth: 200 },
+    { field: 'minOrderAmount', filter: 'agNumberColumnFilter', maxWidth: 200 },
+    { field: 'nextOrderTotalAmount', filter: 'agNumberColumnFilter', maxWidth: 200 },
+    { field: 'orderTotalAmountGainPoint', filter: 'agNumberColumnFilter', maxWidth: 200 },
+    { field: 'orderTotalAmountAfterDiscount', filter: 'agNumberColumnFilter', maxWidth: 200 },
+    { field: 'nextOrderTotalAmountAfterDiscont', filter: 'agNumberColumnFilter', maxWidth: 200 },
+    { field: 'orderTotalAmountAfterDiscountGainPoint', filter: 'agNumberColumnFilter', maxWidth: 200 },
+    { field: 'tierSequenceNumber', filter: 'agNumberColumnFilter', maxWidth: 200 },
+    { field: 'status', maxWidth: 100 },
+    { field: 'description', maxWidth: 200 },
   ]);
 
   const config = {
@@ -306,18 +222,6 @@ export default function User() {
   }, []);
 
   console.log(rowData);
-
-  //   useEffect(() => {
-  //     // invalid url will trigger an 404 error
-  //     axios
-  //       .get('http://13.232.213.53/api/v1/vouchers')
-  //       .then((response) => {
-  //         setVoucher(response.data);
-  //       })
-  //       .catch((error) => {
-  //         setError(error);
-  //       });
-  //   }, []);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -412,7 +316,7 @@ export default function User() {
   }
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <div style={{ containerStyle }}>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
         <Typography variant="h4" gutterBottom>
           Conditions
@@ -426,48 +330,43 @@ export default function User() {
           New Condition
         </Button>
       </Stack>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          <Tab label="Order Amount" {...a11yProps(0)} />
-          <Tab label="Order Item" {...a11yProps(1)} />
-        </Tabs>
-      </Box>
-      <TabPanel value={value} index={0}>
-        <div style={containerStyle}>
-          <UserListToolbar filterName={filterName} onFilterName={handleFilterByName} searchName={'Search voucher...'} />
-          <div style={gridStyle} className="ag-theme-alpine">
-            <AgGridReact
-              rowData={rowData2}
-              columnDefs={columnDefsAmountCondition}
-              defaultColDef={defaultColDef}
-              //   rowModelType={'serverSide'}
-              pagination
-              paginationPageSize={paginationPageSize}
-              cacheBlockSize={10}
-              animateRows
-              onGridReady={onGridReadyAmountCondition}
-            />
-          </div>
-        </div>
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        <div style={containerStyle}>
-          <UserListToolbar filterName={filterName} onFilterName={handleFilterByName} searchName={'Search voucher...'} />
-          <div style={gridStyle} className="ag-theme-alpine">
-            <AgGridReact
-              rowData={rowData}
-              columnDefs={columnDefsItemCondition}
-              defaultColDef={defaultColDef}
-              //   rowModelType={'serverSide'}
-              pagination
-              paginationPageSize={paginationPageSize}
-              cacheBlockSize={10}
-              animateRows
-              onGridReady={onGridReadyItemCondition}
-            />
-          </div>
-        </div>
-      </TabPanel>
-    </Box>
+      <TabContext value={value} style={{ containerStyle }}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <TabList onChange={handleChange} aria-label="lab API tabs example">
+            <Tab label="Order Amount" value="0" />
+            <Tab label="Order Item" value="1" />
+          </TabList>
+        </Box>
+        <TabPanel value="0" style={{ height: 1000 }}>
+          <AgGridReact
+            className="ag-theme-alpine"
+            rowData={rowData2}
+            columnDefs={columnDefsAmountCondition}
+            defaultColDef={defaultColDef}
+            //   rowModelType={'serverSide'}
+            pagination
+            paginationPageSize={paginationPageSize}
+            cacheBlockSize={10}
+            animateRows
+            onGridReady={onGridReadyAmountCondition}
+          />
+        </TabPanel>
+        <TabPanel value="1" style={{ height: 1000 }}>
+          <AgGridReact
+            className="ag-theme-alpine"
+            style={{ height: '100%' }}
+            rowData={rowData}
+            columnDefs={columnDefsItemCondition}
+            defaultColDef={defaultColDef}
+            //   rowModelType={'serverSide'}
+            pagination
+            paginationPageSize={paginationPageSize}
+            cacheBlockSize={10}
+            animateRows
+            onGridReady={onGridReadyItemCondition}
+          />
+        </TabPanel>
+      </TabContext>
+    </div>
   );
 }

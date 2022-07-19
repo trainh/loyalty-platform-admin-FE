@@ -34,9 +34,6 @@ export default function Router() {
         { path: 'membership', element: <Membership /> },
         { path: 'tier', element: <Tier /> },
         { path: 'program', element: <Program /> },
-        { path: 'condition', element: <Condition /> },
-        { path: 'rule', element: <Rule /> },
-
         { path: 'voucher', element: <Voucher /> },
         { path: 'reward', element: <Reward /> },
       ],
@@ -52,9 +49,10 @@ export default function Router() {
       children: [
         { path: 'new-condition-group', element: <NewConditionGroup /> },
         { path: 'new-condition-rule', element: <NewRule /> },
+        { path: 'condition-rules', element: <Rule /> },
         { path: 'new-condition', element: <NewCondition /> },
         { path: 'condition-groups', element: <ConditionGroups /> },
-        {path: 'conditions', element: <Condition/>}
+        { path: 'conditions', element: <Condition /> },
       ],
     },
     {
@@ -62,6 +60,7 @@ export default function Router() {
       element: <DashboardLayout />,
       children: [{ path: 'new-rule', element: <NewRule /> }],
     },
+
     {
       path: '/voucher',
       element: <DashboardLayout />,
