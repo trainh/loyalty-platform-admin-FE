@@ -1,5 +1,5 @@
 import { filter } from 'lodash';
-// import { sentenceCase } from 'change-case';
+import { sentenceCase } from 'change-case';
 import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // material
@@ -9,6 +9,7 @@ import {
   Stack,
   Avatar,
   Button,
+  Checkbox,
   TableRow,
   TableBody,
   TableCell,
@@ -19,7 +20,7 @@ import {
 } from '@mui/material';
 // components
 import Page from '../components/Page';
-// import Label from '../components/Label';
+import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
 import Iconify from '../components/Iconify';
 import SearchNotFound from '../components/SearchNotFound';
@@ -30,10 +31,11 @@ import USERLIST from '../_mock/user';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'no', label: 'No', alignRight: false },
   { id: 'name', label: 'Name', alignRight: false },
-  { id: 'description', label: 'Description', alignRight: false },
-  { id: 'updateDate', label: 'Update Date', alignRight: false },
+  { id: 'company', label: 'Company', alignRight: false },
+  { id: 'role', label: 'Role', alignRight: false },
+  { id: 'isVerified', label: 'Verified', alignRight: false },
+  { id: 'status', label: 'Status', alignRight: false },
   { id: '' },
 ];
 
@@ -96,20 +98,20 @@ export default function User() {
     setSelected([]);
   };
 
-  // const handleClick = (event, name) => {
-  //   const selectedIndex = selected.indexOf(name);
-  //   let newSelected = [];
-  //   if (selectedIndex === -1) {
-  //     newSelected = newSelected.concat(selected, name);
-  //   } else if (selectedIndex === 0) {
-  //     newSelected = newSelected.concat(selected.slice(1));
-  //   } else if (selectedIndex === selected.length - 1) {
-  //     newSelected = newSelected.concat(selected.slice(0, -1));
-  //   } else if (selectedIndex > 0) {
-  //     newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
-  //   }
-  //   setSelected(newSelected);
-  // };
+  const handleClick = (event, name) => {
+    const selectedIndex = selected.indexOf(name);
+    let newSelected = [];
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, name);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
+    }
+    setSelected(newSelected);
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -131,14 +133,14 @@ export default function User() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="Condition">
+    <Page title="Membership">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Condition
+            Membership
           </Typography>
-          <Button variant="contained" component={RouterLink} to="/" startIcon={<Iconify icon="eva:plus-fill" />}>
-            New Condition
+          <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
+            New Membership
           </Button>
         </Stack>
 
@@ -159,19 +161,21 @@ export default function User() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, description, updateDate, avatarUrl } = row;
-                    // const isItemSelected = selected.indexOf(name) !== -1;
-                    // Bỏ trong return -> <TableRow>
-                    // role="checkbox"
-                    // selected={isItemSelected}
-                    // aria-checked={isItemSelected}
+                    const { id, name, role, status, company, avatarUrl, isVerified } = row;
+                    const isItemSelected = selected.indexOf(name) !== -1;
 
-                    // Bỏ trong return -> <TableRow>
-                    // <TableCell padding="checkbox">
-                    //   <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
-                    // </TableCell>;
                     return (
-                      <TableRow hover key={id} tabIndex={-1}>
+                      <TableRow
+                        hover
+                        key={id}
+                        tabIndex={-1}
+                        role="checkbox"
+                        selected={isItemSelected}
+                        aria-checked={isItemSelected}
+                      >
+                        <TableCell padding="checkbox">
+                          <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
+                        </TableCell>
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
                             <Avatar alt={name} src={avatarUrl} />
@@ -180,8 +184,15 @@ export default function User() {
                             </Typography>
                           </Stack>
                         </TableCell>
-                        <TableCell align="left">{description}</TableCell>
-                        <TableCell align="left">{updateDate}</TableCell>
+                        <TableCell align="left">{company}</TableCell>
+                        <TableCell align="left">{role}</TableCell>
+                        <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
+                        <TableCell align="left">
+                          <Label variant="ghost" color={(status === 'banned' && 'error') || 'success'}>
+                            {sentenceCase(status)}
+                          </Label>
+                        </TableCell>
+
                         <TableCell align="right">
                           <UserMoreMenu />
                         </TableCell>

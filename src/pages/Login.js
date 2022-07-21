@@ -1,4 +1,5 @@
-import { Link as RouterLink } from 'react-router-dom';
+import React, {useEffect} from 'react';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
 import { Card, Link, Container, Typography } from '@mui/material';
@@ -8,7 +9,6 @@ import useResponsive from '../hooks/useResponsive';
 import Page from '../components/Page';
 import Logo from '../components/Logo';
 // sections
-import { LoginForm } from '../sections/auth/login';
 import AuthSocial from '../sections/auth/AuthSocial';
 
 // ----------------------------------------------------------------------
@@ -57,9 +57,21 @@ const ContentStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function Login() {
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const authToken = localStorage.getItem('token');
+    if (authToken) {
+        navigate('/')
+    }
+}, [])
+
   const smUp = useResponsive('up', 'sm');
 
   const mdUp = useResponsive('up', 'md');
+
+  console.log(localStorage.getItem('token'));
 
   return (
     <Page title="Login">
@@ -92,8 +104,6 @@ export default function Login() {
             </Typography>
 
             <AuthSocial />
-
-            <LoginForm />
 
             {!smUp && (
               <Typography variant="body2" align="center" sx={{ mt: 3 }}>

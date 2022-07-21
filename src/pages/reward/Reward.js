@@ -1,5 +1,5 @@
 import { filter } from 'lodash';
-import { sentenceCase } from 'change-case';
+// import { sentenceCase } from 'change-case';?
 import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // material
@@ -18,14 +18,13 @@ import {
   TablePagination,
 } from '@mui/material';
 // components
-import Page from '../components/Page';
-import Label from '../components/Label';
-import Scrollbar from '../components/Scrollbar';
-import Iconify from '../components/Iconify';
-import SearchNotFound from '../components/SearchNotFound';
-import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
+import Page from '../../components/Page';
+import Scrollbar from '../../components/Scrollbar';
+import Iconify from '../../components/Iconify';
+import SearchNotFound from '../../components/SearchNotFound';
+import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/@dashboard/user';
 // mock
-import USERLIST from '../_mock/user';
+import USERLIST from '../../_mock/user';
 
 // ----------------------------------------------------------------------
 
@@ -33,10 +32,8 @@ const TABLE_HEAD = [
   { id: 'no', label: 'No', alignRight: false },
   { id: 'name', label: 'Name', alignRight: false },
   { id: 'type', label: 'Type', alignRight: false },
-  { id: 'action', label: 'Action', alignRight: false },
-  { id: 'start', label: 'Start', alignRight: false },
-  { id: 'isVerified', label: 'Verified', alignRight: false },
-  { id: 'status', label: 'Status', alignRight: false },
+  { id: 'createDate', label: 'Create Date', alignRight: false },
+  { id: 'updateDate', label: 'Update Date', alignRight: false },
 ];
 
 // ----------------------------------------------------------------------
@@ -133,14 +130,19 @@ export default function User() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="Promotion">
+    <Page title="Reward">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Promotion
+            Reward
           </Typography>
-          <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
-            New Promotion
+          <Button
+            variant="contained"
+            component={RouterLink}
+            to="/reward/new-reward"
+            startIcon={<Iconify icon="eva:plus-fill" />}
+          >
+            New Reward
           </Button>
         </Stack>
 
@@ -161,11 +163,19 @@ export default function User() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, action, type, start, status, avatarUrl, isVerified } = row;
+                    const { id, no, name, type, createDate, updateDate, avatarUrl } = row;
+                    const isItemSelected = selected.indexOf(name) !== -1;
 
                     return (
-                      <TableRow hover key={id} tabIndex={-1}>
-                        <TableCell align="left">{id}</TableCell>
+                      <TableRow
+                        hover
+                        key={id}
+                        tabIndex={-1}
+                        role="checkbox"
+                        selected={isItemSelected}
+                        aria-checked={isItemSelected}
+                      >
+                        <TableCell align="left">{no}</TableCell>
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
                             <Avatar alt={name} src={avatarUrl} />
@@ -175,14 +185,8 @@ export default function User() {
                           </Stack>
                         </TableCell>
                         <TableCell align="left">{type}</TableCell>
-                        <TableCell align="left">{action}</TableCell>
-                        <TableCell align="left">{start}</TableCell>
-                        <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
-                        <TableCell align="left">
-                          <Label variant="ghost" color={(status === 'banned' && 'error') || 'success'}>
-                            {sentenceCase(status)}
-                          </Label>
-                        </TableCell>
+                        <TableCell align="left">{createDate}</TableCell>
+                        <TableCell align="left">{updateDate}</TableCell>
                         <TableCell align="right">
                           <UserMoreMenu />
                         </TableCell>
