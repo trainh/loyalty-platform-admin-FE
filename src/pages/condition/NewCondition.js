@@ -105,7 +105,7 @@ export default function NewCondition() {
   async function f(test) {
     try {
       const response = await axios.get(
-        'http://13.232.213.53/api/v1/condition-groups/find-all',
+        'https://13.232.213.53/api/v1/condition-groups/find-all',
 
         {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
@@ -121,7 +121,7 @@ export default function NewCondition() {
     try {
       await axios
         .get(
-          'http://13.232.213.53/api/v1/tiers/program/1',
+          'https://13.232.213.53/api/v1/tiers/program/1',
 
           {
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
@@ -137,7 +137,7 @@ export default function NewCondition() {
     try {
       await axios
         .get(
-          'http://13.232.213.53/api/v1/product',
+          'https://13.232.213.53/api/v1/product',
 
           {
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
@@ -152,7 +152,7 @@ export default function NewCondition() {
   async function addOrderAmount() {
     try {
       await axios
-        .post('http://13.232.213.53/api/v1/order-amount-conditions', orderAmountCondition, {
+        .post('https://13.232.213.53/api/v1/order-amount-conditions', orderAmountCondition, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         })
         .catch((reason) => {
@@ -170,7 +170,7 @@ export default function NewCondition() {
   async function addOrderItem() {
     try {
       await axios
-        .post('http://13.232.213.53/api/v1/order-item-conditions', orderItemCondition, {
+        .post('https://13.232.213.53/api/v1/order-item-conditions', orderItemCondition, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         })
         .catch((reason) => {

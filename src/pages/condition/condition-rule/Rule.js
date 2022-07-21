@@ -204,7 +204,7 @@ export default function User() {
   const onGridReady = useCallback(() => {
     axios
       .get(
-        `http://13.232.213.53/api/v1/condition-rules?pageSize=${paginationPageSize}&pageNumber=${pageNumber}&filterString=${filterString}`,
+        `https://13.232.213.53/api/v1/condition-rules?pageSize=${paginationPageSize}&pageNumber=${pageNumber}&filterString=${filterString}`,
 
         {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },

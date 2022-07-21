@@ -98,7 +98,7 @@ export default function NewRule() {
     // rule.endDate = format(endDate, 'yyyy/MM/dd');
     // rule.startDate = format(startDate, 'yyyy/MM/dd');
     axios
-      .post('http://13.232.213.53/api/v1/condition-rules', rule, { headers })
+      .post('https://13.232.213.53/api/v1/condition-rules', rule, { headers })
       .then(navigate('/dashboard/voucher'))
       .catch((err) => console.log(err.response));
   };
