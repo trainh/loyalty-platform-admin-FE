@@ -117,7 +117,7 @@ export default function User() {
 
   const [filterName, setFilterName] = useState('');
 
-  const [paginationPageSize, setPaginationPageSize] = useState(10);
+  const [paginationPageSize, setPaginationPageSize] = useState(20);
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -127,7 +127,7 @@ export default function User() {
 
   const [value, setValue] = useState('1');
 
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(100);
 
   const [pageNumber, setPageNumber] = useState(1);
 

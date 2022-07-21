@@ -81,10 +81,11 @@ export default function NewRule() {
   const navigate = useNavigate();
   const rule = {
     loyaltyProgramId: 1,
+
     createdAt: format(new Date(), 'yyyy/MM/dd'),
     isActive: active === 'true',
-    startDate,
-    endDate,
+    startDate: format(new Date(), 'yyyy/MM/dd'),
+    endDate: format(new Date(), 'yyyy/MM/dd'),
     maxPoints,
     spendingValue,
     minPointsForRedemption,
@@ -92,6 +93,7 @@ export default function NewRule() {
     minRedeemableAmount,
     status: ruleStatus,
     description,
+    name,
   };
 
   const save = (event) => {
@@ -99,7 +101,7 @@ export default function NewRule() {
     // rule.startDate = format(startDate, 'yyyy/MM/dd');
     axios
       .post('http://13.232.213.53/api/v1/condition-rules', rule, { headers })
-      .then(navigate('/dashboard/voucher'))
+      .then(navigate('/condition/condition-rules'))
       .catch((err) => console.log(err.response));
   };
 
@@ -416,6 +418,8 @@ export default function NewRule() {
                 <DesktopDateTimePicker
                   label="Start Date"
                   value={startDate}
+                  inputFormat="dd/MM/yyyy"
+                  minDate={new Date('2017-01-01')}
                   onChange={(newValue) => {
                     setStartDate(newValue);
                   }}
@@ -428,6 +432,8 @@ export default function NewRule() {
                 <DesktopDateTimePicker
                   label="End Date"
                   value={endDate}
+                  inputFormat="dd/MM/yyyy"
+                  minDate={new Date('2017-01-01')}
                   onChange={(newValue) => {
                     setEndDate(newValue);
                   }}

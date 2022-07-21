@@ -3,12 +3,8 @@ import { InboxOutlined } from '@ant-design/icons';
 // import type { UploadProps as Uploaded } from 'antd';
 import { message, Upload } from 'antd';
 import { useDropzone } from 'react-dropzone';
-import {
-  ref,
-  uploadBytes,
-  getDownloadURL,
-} from "firebase/storage";
-import { v4 } from "uuid";
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { v4 } from 'uuid';
 import {
   Container,
   Button,
@@ -26,7 +22,7 @@ import {
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import axios from 'axios';
 import { format } from 'date-fns';
-import { Link as RouterLink,  useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Container as BsContainer, Row as BsRow, Col as BsCol } from 'react-bootstrap';
 import { DesktopDateTimePicker } from '@mui/x-date-pickers/DesktopDateTimePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -34,7 +30,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import Iconify from '../../components/Iconify';
 import Page from '../../components/Page';
 import { storage } from '../../fire/firebaseUploadImageVoucherDefinition';
-
 
 // ----------------------------------------------------------------------
 
@@ -53,7 +48,6 @@ export default function NewVoucher() {
   const headers = {
     Authorization: `Bearer ${localStorage.getItem('token')}`,
   };
-
 
   const [voucherCode, setVoucherCode] = useState('Voucher Code');
   const [name, setName] = useState('');
@@ -80,10 +74,10 @@ export default function NewVoucher() {
     expirationPeriodUnits,
     isPartialRedeemable,
     image,
-    point
+    point,
   };
 
-  const imagesListRef = ref(storage, "images/");
+  const imagesListRef = ref(storage, 'images/');
   const uploadFile = () => {
     if (imageUpload == null) return;
     const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
@@ -123,28 +117,27 @@ export default function NewVoucher() {
   const handleGenerateVoucherCode = () => {
     const r = (Math.random() + 1).toString(36).substring(2);
     setVoucherCode(`VOUCHERCODE${r.toUpperCase()}`);
-  }
+  };
 
-  const handleOnchange = e => {
+  const handleOnchange = (e) => {
     setName(e.target.value);
   };
 
-  const handleOnchangeDiscountVoucher = e => {
+  const handleOnchangeDiscountVoucher = (e) => {
     setDiscountValue(e.target.value);
   };
 
-  const handleOnchangePoint = e => {
+  const handleOnchangePoint = (e) => {
     setPoint(e.target.value);
   };
 
-  const handleOnchangeAmount = e => {
+  const handleOnchangeAmount = (e) => {
     setExpirationPeriod(e.target.value);
-  }
+  };
 
-  const handleOnchangeDescription = e => {
+  const handleOnchangeDescription = (e) => {
     setDescription(e.target.value);
-  }
-
+  };
 
   //   const props: Uploaded = {
   //     name: 'file',
@@ -183,11 +176,8 @@ export default function NewVoucher() {
             component={RouterLink}
             to="#"
             onClick={save}
-            startIcon={
-              <Iconify
-                icon="mdi:content-save"
-              />
-            }>
+            startIcon={<Iconify icon="mdi:content-save" />}
+          >
             Save
           </Button>
         </Stack>
@@ -202,7 +192,7 @@ export default function NewVoucher() {
                 style={{ width: 156 }}
                 variant="contained"
                 onClick={handleGenerateVoucherCode}
-              // startIcon={<Iconify icon="mdi:content-save" />}
+                // startIcon={<Iconify icon="mdi:content-save" />}
               >
                 Generate
               </Button>
@@ -264,7 +254,9 @@ export default function NewVoucher() {
                   value={expirationDate}
                   inputFormat="dd/MM/yyyy"
                   minDate={new Date('2017-01-01')}
-                  onChange={newValue => { setExpirationDate(newValue) }}
+                  onChange={(newValue) => {
+                    setExpirationDate(newValue);
+                  }}
                   renderInput={(params) => (
                     <TextField
                       sx={{
@@ -322,7 +314,8 @@ export default function NewVoucher() {
                   <span style={{ color: 'black', fontSize: 18, fontWeight: 'bold' }}>Partial Redeeme</span>
                 </FormLabel>
                 <RadioGroup
-                  row aria-labelledby="demo-row-radio-buttons-group-label"
+                  row
+                  aria-labelledby="demo-row-radio-buttons-group-label"
                   name="row-radio-buttons-group"
                   onChange={(value, newValue) => setIsPartialRedeemable(newValue === 'true')}
                 >

@@ -113,7 +113,7 @@ export default function User() {
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const [paginationPageSize, setPaginationPageSize] = useState(10);
+  const [paginationPageSize, setPaginationPageSize] = useState(20);
 
   const [pageNumber, setPageNumber] = useState(1);
 

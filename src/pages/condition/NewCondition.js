@@ -190,12 +190,12 @@ export default function NewCondition() {
       addOrderAmount();
     }
     if (optionsEnd.find((oe) => oe.value === 1)) {
-      console.log('this found is 1');
+      optionsEnd[0].selectList.forEach((item) => {
+        orderItemCondition.productId = item;
+        addOrderItem();
+      });
     }
-    optionsEnd[0].selectList.forEach((item) => {
-      orderItemCondition.productId = item;
-      addOrderItem();
-    });
+
     // console.log(conditionGroup);
     // console.log(tier);
   };

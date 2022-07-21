@@ -153,7 +153,7 @@ export default function User() {
 
   const [filterName, setFilterName] = useState('');
 
-  const [paginationPageSize, setPaginationPageSize] = useState(10);
+  const [paginationPageSize, setPaginationPageSize] = useState(20);
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -219,11 +219,15 @@ export default function User() {
     },
   };
 
+  const headers = {
+    Authorization: `Bearer ${localStorage.getItem('token')}`,
+  };
+
   console.log(localStorage.getItem('token'));
 
   const onGridReady = useCallback((params) => {
     axios
-      .get('http://13.232.213.53/api/v1/vouchers', bodyParameters, config)
+      .get('http://13.232.213.53/api/v1/vouchers?pageNumber=1&pageSize=100', { headers })
       .then((response) => {
         setRowData(response.data);
       })
