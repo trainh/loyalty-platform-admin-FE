@@ -52,7 +52,7 @@ const loginWithGoogle = async () => {
 };
 
 function getToken(googleToken) {
-  return axios.post('https://13.232.213.53/api/v1/auth/login', { idToken: googleToken });
+  return axios.post('http://13.232.213.53/api/v1/auth/login', { idToken: googleToken });
 }
 
 const logout = () => {

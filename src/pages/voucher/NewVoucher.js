@@ -111,7 +111,7 @@ export default function NewVoucher() {
   const saveService = () => {
     console.log(`5 ${voucher.image}`);
     axios
-      .post('https://13.232.213.53/api/v1/vouchers', voucher, { headers })
+      .post('http://13.232.213.53/api/v1/vouchers', voucher, { headers })
       .then(navigate('/dashboard/voucher'))
       .catch((err) => console.log(err.response));
   };

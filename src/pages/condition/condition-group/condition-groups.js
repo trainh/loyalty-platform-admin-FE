@@ -222,7 +222,7 @@ export default function ConditionGroups() {
 
   const onGridReady = useCallback((params) => {
     axios
-      .get('https://13.232.213.53/api/v1/condition-groups?pageSize=50&pageNumber=1&orderBy=name', {
+      .get('http://13.232.213.53/api/v1/condition-groups?pageSize=50&pageNumber=1&orderBy=name', {
         headers,
       })
       .then((response) => {

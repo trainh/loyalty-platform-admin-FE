@@ -19,7 +19,7 @@ export default function NewCondition() {
   async function getConditionRule(test) {
     try {
       const response = await axios.get(
-        'https://13.232.213.53/api/v1/condition-rules/find-all',
+        'http://13.232.213.53/api/v1/condition-rules/find-all',
 
         {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
@@ -59,7 +59,7 @@ export default function NewCondition() {
   const onSave = () => {
     console.log(conditionRuleId);
     axios
-      .post('https://13.232.213.53/api/v1/condition-groups', conditionGroup, { headers })
+      .post('http://13.232.213.53/api/v1/condition-groups', conditionGroup, { headers })
       .then(navigate('/condition/condition-groups'));
   };
 

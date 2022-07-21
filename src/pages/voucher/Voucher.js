@@ -223,7 +223,7 @@ export default function User() {
 
   const onGridReady = useCallback((params) => {
     axios
-      .get('https://13.232.213.53/api/v1/vouchers', bodyParameters, config)
+      .get('http://13.232.213.53/api/v1/vouchers', bodyParameters, config)
       .then((response) => {
         setRowData(response.data);
       })

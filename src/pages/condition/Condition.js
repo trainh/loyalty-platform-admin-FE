@@ -196,7 +196,7 @@ export default function User() {
   const onGridReadyAmountCondition = useCallback((params) => {
     axios
       .get(
-        `https://13.232.213.53/api/v1/order-amount-conditions?pageSize=${pageSize}&pageNumber=${pageNumber}&filterString=${filterString}&orderBy=${orderBy}`,
+        `http://13.232.213.53/api/v1/order-amount-conditions?pageSize=${pageSize}&pageNumber=${pageNumber}&filterString=${filterString}&orderBy=${orderBy}`,
         { headers }
       )
       .then((response) => {
@@ -210,7 +210,7 @@ export default function User() {
   const onGridReadyItemCondition = useCallback((params) => {
     axios
       .get(
-        `https://13.232.213.53/api/v1/order-item-conditions?pageSize=${pageSize}&pageNumber=${pageNumber}&filterString=${filterString}&orderBy=${orderBy}`,
+        `http://13.232.213.53/api/v1/order-item-conditions?pageSize=${pageSize}&pageNumber=${pageNumber}&filterString=${filterString}&orderBy=${orderBy}`,
         { headers }
       )
       .then((response) => {
