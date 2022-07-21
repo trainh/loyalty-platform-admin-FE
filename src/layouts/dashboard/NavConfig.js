@@ -12,19 +12,9 @@ const navConfig = [
     icon: getIcon('eva:pie-chart-2-fill'),
   },
   {
-    title: 'membership',
-    path: '/dashboard/membership',
-    icon: getIcon('eva:people-fill'),
-  },
-  {
     title: 'tier',
     path: '/dashboard/tier',
     icon: getIcon('fa6-solid:ranking-star'),
-  },
-  {
-    title: 'program',
-    path: '/dashboard/program',
-    icon: getIcon('mdi:format-list-bulleted-square'),
   },
   {
     title: 'condition',
@@ -33,23 +23,18 @@ const navConfig = [
   },
   {
     title: 'rule',
-    path: '/dashboard/rule',
+    path: '/condition/condition-rules',
     icon: getIcon('clarity:note-solid'),
   },
   {
-    title: 'new condition',
-    path: '/condition/new-condition',
+    title: 'condition group',
+    path: '/condition/condition-groups',
     icon: getIcon('mdi:note-alert'),
   },
   {
     title: 'voucher',
     path: '/dashboard/voucher',
     icon: getIcon('mdi:tag'),
-  },
-  {
-    title: 'reward',
-    path: '/dashboard/reward',
-    icon: getIcon('eva:gift-fill'),
   },
 ];
 
