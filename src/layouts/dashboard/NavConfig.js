@@ -28,7 +28,7 @@ const navConfig = [
   },
   {
     title: 'condition',
-    path: '/dashboard/condition',
+    path: '/condition/conditions',
     icon: getIcon('mdi:clipboard-text'),
   },
   {
@@ -38,7 +38,7 @@ const navConfig = [
   },
   {
     title: 'new condition',
-    path: '/dashboard/new-condition',
+    path: '/condition/new-condition',
     icon: getIcon('mdi:note-alert'),
   },
   {
