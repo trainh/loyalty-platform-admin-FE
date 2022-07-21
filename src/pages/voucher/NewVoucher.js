@@ -1,8 +1,14 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { InboxOutlined } from '@ant-design/icons';
 // import type { UploadProps as Uploaded } from 'antd';
 import { message, Upload } from 'antd';
 import { useDropzone } from 'react-dropzone';
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+} from "firebase/storage";
+import { v4 } from "uuid";
 import {
   Container,
   Button,
@@ -18,20 +24,127 @@ import {
   FormLabel,
 } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { Link as RouterLink } from 'react-router-dom';
+import axios from 'axios';
+import { format } from 'date-fns';
+import { Link as RouterLink,  useNavigate } from 'react-router-dom';
 import { Container as BsContainer, Row as BsRow, Col as BsCol } from 'react-bootstrap';
 import { DesktopDateTimePicker } from '@mui/x-date-pickers/DesktopDateTimePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import Iconify from '../../components/Iconify';
 import Page from '../../components/Page';
+import { storage } from '../../fire/firebaseUploadImageVoucherDefinition';
+
 
 // ----------------------------------------------------------------------
 
 export default function NewVoucher() {
-  const [valueDate, setValue] = useState(new Date('2018-01-01T00:00:00.000Z'));
   const expireOptions = ['Day', 'Month', 'Year'];
   const { Dragger } = Upload;
+
+  const config = {
+    Headers: {
+      'Content-Type': 'application/json',
+      Authorization:
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImN0eSI6IkpXVCJ9.eyJlbWFpbCI6ImxldHJhbmR1eWFuaDEwNDIwMDBAZ21haWwuY29tIiwianRpIjoiNzlkMGNmOWQtNjU1NS00NmFjLWJjMjMtOGNjZjdjZGFiMWJkIiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjU3MjcyMTI4LCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vbG95YWx0eS1wbGF0Zm9ybS1kYmIwNSIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NDk2MjIvaW5kZXguaHRtbCJ9.wSyDew5olENMVyDV7ajJlpir4NrG_zoRdo65o61bfl8',
+    },
+  };
+
+  const headers = {
+    Authorization: `Bearer ${localStorage.getItem('token')}`,
+  };
+
+
+  const [voucherCode, setVoucherCode] = useState('Voucher Code');
+  const [name, setName] = useState('');
+  const [discountValue, setDiscountValue] = useState(0);
+  const [point, setPoint] = useState(0);
+  const [effectiveDate, setEffectiveDate] = useState(format(new Date(), 'yyyy/MM/dd'));
+  const [expirationDate, setExpirationDate] = useState(format(new Date(), 'yyyy/MM/dd'));
+  const [expirationPeriod, setExpirationPeriod] = useState(0);
+  const [expirationPeriodUnits, setExpirationPeriodUnits] = useState('');
+  const [isPartialRedeemable, setIsPartialRedeemable] = useState(true);
+  const [imageUpload, setImageUpload] = useState(null);
+  const [image, setImage] = useState('');
+  const [description, setDescription] = useState('');
+
+  const voucher = {
+    name,
+    discountValue,
+    effectiveDate: format(new Date(), 'yyyy/MM/dd'),
+    expirationDate: format(new Date(), 'yyyy/MM/dd'),
+    voucherCode,
+    status: 1,
+    description,
+    expirationPeriod,
+    expirationPeriodUnits,
+    isPartialRedeemable,
+    image,
+    point
+  };
+
+  const imagesListRef = ref(storage, "images/");
+  const uploadFile = () => {
+    if (imageUpload == null) return;
+    const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
+    uploadBytes(imageRef, imageUpload).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then((url) => {
+        setImage(url);
+        voucher.image = url;
+        saveService();
+      });
+    });
+  };
+
+  // useEffect(() => {
+  //   listAll(imagesListRef).then((response) => {
+  //     response.items.forEach((item) => {
+  //       getDownloadURL(item).then((url) => {
+  //         setImageUrls((prev) => [...prev, url]);
+  //       });
+  //     });
+  //   });
+  // }, []);
+
+  const navigate = useNavigate();
+
+  const saveService = () => {
+    console.log(`5 ${voucher.image}`);
+    axios
+      .post('http://13.232.213.53/api/v1/vouchers', voucher, { headers })
+      .then(navigate('/dashboard/voucher'))
+      .catch((err) => console.log(err.response));
+  };
+
+  const save = () => {
+    uploadFile();
+  };
+
+  const handleGenerateVoucherCode = () => {
+    const r = (Math.random() + 1).toString(36).substring(2);
+    setVoucherCode(`VOUCHERCODE${r.toUpperCase()}`);
+  }
+
+  const handleOnchange = e => {
+    setName(e.target.value);
+  };
+
+  const handleOnchangeDiscountVoucher = e => {
+    setDiscountValue(e.target.value);
+  };
+
+  const handleOnchangePoint = e => {
+    setPoint(e.target.value);
+  };
+
+  const handleOnchangeAmount = e => {
+    setExpirationPeriod(e.target.value);
+  }
+
+  const handleOnchangeDescription = e => {
+    setDescription(e.target.value);
+  }
+
 
   //   const props: Uploaded = {
   //     name: 'file',
@@ -65,7 +178,16 @@ export default function NewVoucher() {
           <Typography variant="h4" gutterBottom>
             New Voucher
           </Typography>
-          <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="mdi:content-save" />}>
+          <Button
+            variant="contained"
+            component={RouterLink}
+            to="#"
+            onClick={save}
+            startIcon={
+              <Iconify
+                icon="mdi:content-save"
+              />
+            }>
             Save
           </Button>
         </Stack>
@@ -75,13 +197,12 @@ export default function NewVoucher() {
               <span style={{ fontSize: 18, fontWeight: 'bold' }} className="m-2">
                 Voucher Code:
               </span>
-              <TextField style={{ width: 500, marginRight: 10 }} size="small" label="Voucher Code" disabled />
+              <TextField style={{ width: 500, marginRight: 10 }} size="small" value={voucherCode} disabled />
               <Button
                 style={{ width: 156 }}
                 variant="contained"
-                component={RouterLink}
-                to="#"
-                // startIcon={<Iconify icon="mdi:content-save" />}
+                onClick={handleGenerateVoucherCode}
+              // startIcon={<Iconify icon="mdi:content-save" />}
               >
                 Generate
               </Button>
@@ -90,6 +211,7 @@ export default function NewVoucher() {
           <BsRow>
             <TextField
               style={{ width: 800, marginBottom: 18 }}
+              onChange={handleOnchange}
               id="outlined-basic"
               label="Name"
               variant="outlined"
@@ -101,6 +223,7 @@ export default function NewVoucher() {
               <TextField
                 style={{ width: 394 }}
                 id="outlined-basic"
+                onChange={handleOnchangeDiscountVoucher}
                 label="Discount Value "
                 variant="outlined"
                 type="number"
@@ -113,6 +236,7 @@ export default function NewVoucher() {
                 id="outlined-basic"
                 label="Point"
                 variant="outlined"
+                onChange={handleOnchangePoint}
                 type="number"
                 required
               />
@@ -123,10 +247,11 @@ export default function NewVoucher() {
               <BsCol sm={2.5}>
                 <DesktopDateTimePicker
                   label="Voucher Effective Date"
-                  value={valueDate}
+                  value={effectiveDate}
+                  inputFormat="dd/MM/yyyy"
                   minDate={new Date('2017-01-01')}
                   onChange={(newValue) => {
-                    setValue(newValue);
+                    setEffectiveDate(newValue);
                   }}
                   renderInput={(params) => (
                     <TextField style={{ width: 394 }} disabled id="outlined-disabled" {...params} required />
@@ -136,11 +261,10 @@ export default function NewVoucher() {
               <BsCol>
                 <DesktopDateTimePicker
                   label="Voucher Expiration Date"
-                  value={valueDate}
+                  value={expirationDate}
+                  inputFormat="dd/MM/yyyy"
                   minDate={new Date('2017-01-01')}
-                  onChange={(newValue) => {
-                    setValue(newValue);
-                  }}
+                  onChange={newValue => { setExpirationDate(newValue) }}
                   renderInput={(params) => (
                     <TextField
                       sx={{
@@ -160,7 +284,14 @@ export default function NewVoucher() {
               <span style={{ fontSize: 18, fontWeight: 'bold' }} className="m-2">
                 Exp. Period:
               </span>
-              <TextField style={{ width: 273, marginRight: 8 }} size="large" label="Amount" type="number" required />
+              <TextField
+                style={{ width: 273, marginRight: 8 }}
+                size="large"
+                label="Amount"
+                type="number"
+                onChange={handleOnchangeAmount}
+                required
+              />
               <span style={{ fontSize: 18, fontWeight: 'bold' }} className="m-2">
                 Exp. Period Unit:
               </span>
@@ -168,6 +299,9 @@ export default function NewVoucher() {
                 size="large"
                 className="mx-1"
                 options={expireOptions}
+                onChange={(event, newValue) => {
+                  setExpirationPeriodUnits(newValue);
+                }}
                 renderInput={(params) => (
                   <TextField
                     style={{ width: 233 }}
@@ -187,9 +321,13 @@ export default function NewVoucher() {
                 <FormLabel id="demo-row-radio-buttons-group-label">
                   <span style={{ color: 'black', fontSize: 18, fontWeight: 'bold' }}>Partial Redeeme</span>
                 </FormLabel>
-                <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group">
-                  <FormControlLabel value="female" control={<Radio />} label="Yes" />
-                  <FormControlLabel value="male" control={<Radio />} label="No" />
+                <RadioGroup
+                  row aria-labelledby="demo-row-radio-buttons-group-label"
+                  name="row-radio-buttons-group"
+                  onChange={(value, newValue) => setIsPartialRedeemable(newValue === 'true')}
+                >
+                  <FormControlLabel value="true" control={<Radio />} label="Yes" />
+                  <FormControlLabel value="false" control={<Radio />} label="No" />
                 </RadioGroup>
               </FormControl>
             </span>
@@ -206,23 +344,22 @@ export default function NewVoucher() {
                   sx={{ border: '1px solid grey', height: 200, bgcolor: 'grey', mb: 3, width: '100%' }}
                 >
                   <Grid item>
-                    <div {...drop.getRootProps()}>
-                      <Grid item>
-                        <Grid container direction="row">
-                          <Grid item>
-                            <CloudUploadIcon sx={{ fontSize: 30, mr: 2, color: 'grey' }} />
-                          </Grid>
-                          <Grid item>
-                            <input {...drop.getInputProps()} />
-                            {drop.isDragActive ? (
-                              <p>Drop the files here ...</p>
-                            ) : (
-                              <Typography sx={{ fontSize: 20, color: 'GreyText' }}>Drop your images here</Typography>
-                            )}
-                          </Grid>
+                    <Grid item>
+                      <Grid container direction="row">
+                        <Grid item>
+                          <CloudUploadIcon sx={{ fontSize: 30, mr: 2, color: 'grey' }} />
+                        </Grid>
+                        <Grid item>
+                          <input
+                            type="file"
+                            onChange={(event) => {
+                              console.log(event.target.files[0]);
+                              setImageUpload(event.target.files[0]);
+                            }}
+                          />
                         </Grid>
                       </Grid>
-                    </div>
+                    </Grid>
                   </Grid>
                 </Grid>
               </Grid>
@@ -239,6 +376,7 @@ export default function NewVoucher() {
               id="outlined-basic"
               label="Description"
               variant="outlined"
+              onChange={handleOnchangeDescription}
               required
               multiline
             />
